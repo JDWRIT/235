@@ -2,7 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\dig-dug",
-    "\\H1BasicGamePage"
+    "\\H1BasicGamePage",
+    "\\tetris-start",
+    "\\tetris-start\\css"
   ],
+  "SelectedNode": "\\dig-dug\\index.html",
   "PreviewInSolutionExplorer": false
 }
