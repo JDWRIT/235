@@ -1,3 +1,59 @@
 .JDWHead {
     width: 10vw;
 }
+
+.GitHub {
+    text-align: center;
+}
+
+#ExternalLink {
+    font-weight: bold;
+}
+
+#About {
+    background-color: #ce992a;
+    border: 2px solid black;
+    text-align: center;
+}
+
+h2 {
+    background-color: #e63a3a;
+}
+
+ul {
+    background-color: #ce992a;
+    list-style: none;
+    border: 2px solid black;
+}
+
+body {
+    background-color: #3cbfc7;
+}
+
+main {
+    background-color: #4f0b0b;
+}
+
+img {
+    border: 2px solid black;
+}
+
+a:link {
+    color: #26283d;
+}
+
+a:visited {
+    color: #3e0340;
+}
+
+a:focus {
+    color: #3b6434;
+}
+
+a:hover {
+    color: #ff0000;
+}
+
+a:active {
+    color: #895ccf;
+}
