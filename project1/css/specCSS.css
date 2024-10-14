@@ -1,0 +1,102 @@
+html {
+    background-color: whitesmoke;
+}
+
+body {
+    width: 80%;
+    margin-left: 10%;
+}
+
+header img {
+    width: 100%;
+}
+
+header div {
+    display: block;
+    background-color: darkorange;
+    position: absolute;
+    top: 0px;
+}
+
+header div h3 {
+    position: relative;
+    left: 50px;
+}
+
+header h2 {
+    display: block;
+    background-color: darkorange;
+    width: 12%;
+    position: relative;
+    top: -2lh;
+}
+
+.primary-text {
+    column-count: 3;
+    grid-area: text;
+    margin-right: 10%;
+}
+
+.line {
+    width: 100%
+}
+
+.box1 {
+    grid-area: box1;
+    outline: auto;
+    padding: 2%;
+}
+
+.box2 {
+    grid-area: box2;
+    outline: auto;
+    padding: 2%;
+}
+
+main {
+    margin-bottom: 5%;
+    display: grid;
+    grid-template-areas: 
+    'text text box1'
+    'text text box2';
+}
+
+footer {
+    margin-left: 15%;
+}
+
+footer img{
+    width: 80%;
+}
+
+/*
+.page-content{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+    justify-content: center;
+    background-color: aqua;
+}
+
+.header {
+    display: flex;
+    position: relative;
+    background-image: url(https://ritathletics.com/images/2024/4/18/Tiger_Stadium.jpg?preset=large.socialmediaimage);
+}
+
+.text-container {
+    margin: 20px 800px 20px 200px;
+}
+
+.text-container p {
+    column-count: 3;
+}
+
+footer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+*/
