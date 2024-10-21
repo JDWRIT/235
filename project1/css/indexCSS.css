@@ -1,0 +1,134 @@
+html {
+    background-color: slategray;
+}
+
+body {
+    width: 80%;
+    margin-left: 10%;
+    background-color: lightslategray;
+}
+
+a:link {
+    color: orange;
+}
+
+a:visited {
+    color: darkcyan;
+}
+
+a:focus {
+    color: aqua;
+}
+
+a:hover {
+    color: aqua;
+}
+
+a:active {
+    color: red;
+}
+
+header img {
+    width: 100%;
+}
+
+nav {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background-color: rgb(87, 101, 109);
+}
+
+.nav {
+    position: relative;
+    bottom: 10px;
+    background-color: rgb(87, 101, 109);
+}
+
+header div {
+    display: block;
+    background-color: darkorange;
+    padding: 10px;
+}
+
+@media screen and (min-width: 1265px){
+    header div {
+        display: block;
+        background-color: darkorange;
+        position: absolute;
+        top: 0px;
+        padding: 15px;
+    }
+}
+
+header div h3 {
+    position: relative;
+    left: 50px;
+}
+
+header h2 {
+    display: block;
+    background-color: darkorange;
+    width: 100%;
+    padding: 5px;
+}
+
+@media screen and (min-width: 1265px){
+    header h2 {
+        display: block;
+        background-color: darkorange;
+        width: 12%;
+        position: relative;
+        top: -2lh;
+        padding: 5px;
+    }
+}
+
+.primary-text {
+    column-count: 2;
+    grid-area: text;
+    margin-right: 10%;
+    margin-left: 5%;
+}
+
+@media screen and (min-width: 1265px){
+    .primary-text {
+        column-count: 3;
+    }
+}
+
+.line {
+    width: 100%
+}
+
+.box1 {
+    grid-area: box1;
+    outline: auto;
+    padding: 10%;
+    background-color: azure;
+    margin-right: 10%;
+}
+
+.box2 {
+    grid-area: box2;
+    outline: auto;
+    padding: 10%;
+    background-color: azure;
+    margin-right: 10%;
+}
+
+main {
+    margin-bottom: 5%;
+    display: grid;
+    grid-template-areas: 
+    'text text box1'
+    'text text box2';
+}
+
+footer {
+    margin-left: 15%;
+}
+
+footer img{
+    width: 80%;
+}
