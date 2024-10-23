@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link ID="pagestyle" rel="stylesheet" href="normalstyle.css">
+	<title>Dark Mode Demo</title>
+	<script>
+		"use strict";
+		window.onload = init;
+
+		function swapStyleSheet(sheet) {
+			console.log("Setting style to: " + sheet);
+			document.getElementById("pagestyle").setAttribute("href", sheet);  
+		}
+
+		function init(){
+			console.log("Page is loaded!");
+			document.querySelector("h2").innerHTML = "Window loaded!";
+			
+			var style1_normal = document.getElementById("normal");
+			var style2_dark = document.getElementById("dark");
+
+			style1_normal.onclick = function(e){
+				swapStyleSheet("normalstyle.css");
+				console.log("normal mode set!");
+			}
+
+			style2_dark.addEventListener("click", function(){
+				swapStyleSheet("darkstyle.css");
+				console.log("Darkmode set!");
+			});
+		}
+
+		console.log("Page is NOT loaded!");
+	</script>
+</head>
+<body>
+
+<h1>Java Script Dark Mode Demo</h1>
+
+<button id="normal" class="button">Normal CSS</button>
+<button id="dark" class="button">Dark Mode CSS</button>
+
+<h2>???</h2>
+
+<p>This is a bunch of text on my page.</p>
+
+<img src="rickandmorty.png">
+
+<p>That's Right Morty! This is gonna be a lot like that. Except you know. It's gonna make sense. You have to turn them on Morty! The shoes need to be turned on! You don't get to tell me what to look at. I've seen your Pornhub account. Also, who makes a Pornhub account? </p>
+
+<p>Really, you're gonna pull that move? I guided your entire civilisation. Your people have a holiday named ricksgiving. They teach kids about me in school. Where are my testicles, Summer? Oh god, oh, I blame myself. Oh, what a tragedy. Oh, well, he's bones now. I guess all debts are paid. </p>
+
+<p>Existence is pain to a meeseeks Jerry, and we will do anything to alleviate that pain. Oh boy, so you actually learned something today? What is this? Full House? I was living in the moment all day, and it kept getting me killed by Nazis. I think you need to think ahead and live in the moment. Morty, I'm a drunk, not a hack. </p>
+
+</body>
+</html>
