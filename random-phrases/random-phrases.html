@@ -20,6 +20,8 @@
     <footer>Website by Joshua DeWinter</footer>
 
     <script>
+        "use strict"
+
         window.onload = function(e){DisplayQuote()}
 
         let randomizerButton = document.getElementById("randomizer");
@@ -31,9 +33,7 @@
                              "One does not mess with the hot dog overlord and go unscathed",
                              "My wisdom comes from my hot dog leaders, so it should be held in high regard!"];
 
-        randomizerButton.onclick = function(e){
-            DisplayQuote();
-        }
+        randomizerButton.onclick = DisplayQuote;
 
         function DisplayQuote(){
             randomText.innerHTML = "Wise words: " + randomContent[Math.floor(Math.random() * randomContent.length)];

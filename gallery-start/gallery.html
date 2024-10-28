@@ -82,11 +82,8 @@
      </footer>
     </section>
      <script>
-		/*
-		The name of the image is stored in the data-image (custom data) attribute of each
-		span. In JavaScript we access these custom data properties using the .dataset 
-		property. We also covered this in web-apps-6.
-		*/
+		"use strict"
+		
 		let snapshots = document.getElementById("imagewrapper");
 
 		let choiceList = document.getElementsByTagName("li");
@@ -105,7 +102,7 @@
 			let toDelete = document.getElementById("current-selection");
 			toDelete.remove();
 			let toAdd = document.createElement('img');
-			toAdd.src = "images/" + image.getAttribute('data-image');
+			toAdd.src = "images/" + image.dataset.image;
 			toAdd.alt = image.title;
 			toAdd.id = "current-selection";
 			snapshots.appendChild(toAdd);
