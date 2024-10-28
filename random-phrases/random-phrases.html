@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang ="en">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Jacquarda+Bastarda+9&display=swap" rel="stylesheet">
+	<title>Random Phrases</title>
+</head>
+<body>
+    <img src="HotDogMan.png" alt="Hot dog man"/>
+    <header>
+        <h1>Wise words from the Hot Dog Man</h1>
+    </header>
+    <main>
+        <p id="random-text">Wise words: <br>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto dolor eius eligendi, molestias cumque qui quis quasi laborum pariatur deleniti officia cum quos animi. Quod?</p>
+        <button id="randomizer">Click for more Hot Dog wisdom</button>
+    </main>
+    <footer>Website by Joshua DeWinter</footer>
+
+    <script>
+        window.onload = function(e){DisplayQuote()}
+
+        let randomizerButton = document.getElementById("randomizer");
+        let randomText = document.getElementById("random-text");
+
+        let randomContent = ["One hot dog per day keeps the secrets and lies at bay!",
+                             "Trusting anything G-1982 says is foolish, they are a pawn of the enemy",
+                             "A hot dog is only 151 calories, which means that it is the perfect low calorie food!",
+                             "One does not mess with the hot dog overlord and go unscathed",
+                             "My wisdom comes from my hot dog leaders, so it should be held in high regard!"];
+
+        randomizerButton.onclick = function(e){
+            DisplayQuote();
+        }
+
+        function DisplayQuote(){
+            randomText.innerHTML = "Wise words: " + randomContent[Math.floor(Math.random() * randomContent.length)];
+        }
+    </script>
+</body>
+</html>

@@ -38,7 +38,29 @@
 </div>
 
 <script>
-    redOption = document.getElementById("colorGroupRed");
+    "use strict";
+
+    let redOption = document.getElementById("colorGroupRed");
+    let greenOption = document.getElementById("colorGroupGreen");
+    let blueOption = document.getElementById("colorGroupBlue");
+
+    redOption.onchange = function(e){selectColor(e.target.value);};
+    greenOption.onchange = function(e){selectColor(e.target.value);};
+    blueOption.onchange = function(e){selectColor(e.target.value);};
+
+    let infoText = document.getElementById("info");
+
+    function selectColor(color){
+        infoText.innerHTML = "You have selected \"" + color + "\"!";
+        chosenColor = color;
+    }
+
+    let chosenColor = "red";
+
+    let submitButton = document.getElementById("colorButton");
+
+    submitButton.onclick = function(e){infoText.innerHTML = "Your FINAL CHOICE is \"" + chosenColor + "\"!";};
+
 </script>
 </body>
 </html>
