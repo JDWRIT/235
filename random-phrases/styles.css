@@ -2,48 +2,53 @@ html {
     background-color: darkslategray;
 }
 
-img {
-    border-radius: 100px;
+body {
     position: absolute;
-    left: 25vw;
-    top: 25vh;
-    width: 50vw;
+    width: 80vw;
+    height: 100vw;
+    left: 10vw;
+}
+
+img {
+    position: absolute;
+    width: 100%;
 }
 
 h1 {
     background-color: brown;
     position: absolute;
-    left: 38.5vw;
-    top: 25vh;
+    left: 15%;
     padding: 1%;
-    width: 20.5vw;
     border-radius: 20px;
     font-family: "DynaPuff";
-    font-size: 1.2vw;
+}
+
+main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 #random-text {
     background-color: goldenrod;
     position: absolute;
-    left: 27vw;
-    top: 40vh;
-    padding: 1%;
-    width: 10vw;
+    top: 10%;
+    left: 5%;
+    width: 20%;
     border-radius: 20px;
+    padding: 1%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.7vw;
 }
 
 button {
     position: absolute;
-    left: 53vw;
-    top: 60vh;
+    left: 53%;
+    top: 28%;
     padding: 1%;
-    width: 8vw;
+    width: 15%;
     border-radius: 20px;
     background-color: darksalmon;
     font-family: "DynaPuff";
-    font-size: 0.7vw;
 }
 
 button:hover {
@@ -56,7 +61,6 @@ button:active {
 
 footer {
     position: absolute;
-    left: 60vw;
-    top: 78vh;
-    font-size: 0.7vw;
+    left: 72%;
+    top: 43%;
 }
