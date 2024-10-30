@@ -43,6 +43,8 @@
     let redOption = document.getElementById("colorGroupRed");
     let greenOption = document.getElementById("colorGroupGreen");
     let blueOption = document.getElementById("colorGroupBlue");
+    let titleText = document.getElementsByTagName("legend");
+
 
     redOption.onchange = function(e){selectColor(e.target.value);};
     greenOption.onchange = function(e){selectColor(e.target.value);};
@@ -59,7 +61,10 @@
 
     let submitButton = document.getElementById("colorButton");
 
-    submitButton.onclick = function(e){infoText.innerHTML = "Your FINAL CHOICE is \"" + chosenColor + "\"!";};
+    submitButton.onclick = function(e){
+		infoText.innerHTML = "Your FINAL CHOICE is \"" + chosenColor + "\"!";
+		titleText[0].style.color = chosenColor;
+	};
 
 </script>
 </body>
