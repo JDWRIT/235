@@ -25,7 +25,7 @@ function selectionChange(){
                                 <option value="damp">Damp</option>
                                 <option value="chlorophyll">Chlorophyll</option>
                             </select>`;
-        searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="text" size="20" maxlength="20" autofocus value="5" />`
+        searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
     }
     else {
         searchTerm.innerHTML = `Type options ->`;
@@ -34,7 +34,7 @@ function selectionChange(){
                                 <option value="fire">Fire</option>
                                 <option value="ice">Ice</option>
                             </select>`;
-        searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="text" size="20" maxlength="20" autofocus value="5" />`
+        searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
     }
 }
 
@@ -75,15 +75,7 @@ function dataLoaded(e){
     let returnable = "";
 
     if (optionSelection == "pokemon") {
-        returnable = `<div id='pokemon'>`;
-        let pokemonImage = obj.sprites.front_default;
-        returnable += `<img src='${pokemonImage}' title='pokemon_image' /><br>`;
-        returnable += "Name: " + obj.name + `<br>`;
-        returnable += "HP: " + obj.stats[0].base_stat + `<br>`;
-        returnable += "Attack: " + obj.stats[1].base_stat + `<br>`;
-        returnable += "Defense: " + obj.stats[2].base_stat + `<br>`;
-        returnable += "Speed: " + obj.stats[5].base_stat + `<br>`;
-        returnable += `</div>`
+        returnable = makePokemon(obj);
     }
     else {
         pokemonList = obj.pokemon;
@@ -120,6 +112,13 @@ function addPokemon(e){
     let obj = JSON.parse(xhr.responseText);
     console.log(obj);
 
+    let returnable = "";
+    returnable = makePokemon(obj);
+    
+    document.querySelector("#content").innerHTML += returnable
+}
+
+function makePokemon(obj) {
     let returnable = `<div id='pokemon'>`;
     let pokemonImage = obj.sprites.front_default;
     returnable += `<img src='${pokemonImage}' title='pokemon_image' /><br>`;
@@ -129,6 +128,5 @@ function addPokemon(e){
     returnable += "Defense: " + obj.stats[2].base_stat + `<br>`;
     returnable += "Speed: " + obj.stats[5].base_stat + `<br>`;
     returnable += `</div>`
-    
-    document.querySelector("#content").innerHTML += returnable
+    return returnable;
 }
