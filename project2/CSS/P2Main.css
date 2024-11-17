@@ -1,3 +1,42 @@
 * {
     background-color: aliceblue;
 }
+
+#option {
+    grid-area: UI;
+}
+
+#searchTerm {
+    grid-area: UI;
+}
+
+#search {
+    grid-area: UI;
+}
+
+body {
+    display: grid;
+    grid-template-areas: 'UI content content content content content';
+}
+
+#content {
+    grid-area: content;
+    position: relative;
+    top: 70px;
+    margin: 0 auto;
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px 20px;
+}
+
+#pokemon {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+}
+
+#pokemon img {
+    width: 100%;
+    box-shadow: 0 4px 5px 0;
+}

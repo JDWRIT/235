@@ -7,6 +7,19 @@
   	<script src="JS/P2Main.js"></script>
 </head>
 <body>
-    <p id="ExampleContent"></p>
+	<div id="UI">
+		Options -> 
+		<select id="option">
+			<option value="pokemon" selected>Pokemon by name</option>
+			<option value="ability">Pokemon ability by name</option>
+			<option value="type">Pokemon type by name</option>
+		</select>
+		
+		<div id="searchterm">Search Term -> </div>
+
+		<button type="button" id="search" class="green">Search!</button>
+	</div>
+    
+	<div id="content">Result goes here!</div>
 </body>
 </html>
