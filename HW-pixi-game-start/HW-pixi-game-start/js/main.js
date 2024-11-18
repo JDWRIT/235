@@ -254,6 +254,15 @@ function end() {
   gameScene.visible = false;
 }
 
+function fireBullet() {
+  if (paused) return;
+
+  let b = new Bullet(0xffffff, ship.x, ship.y);
+  bullets.push(b);
+  gameScene.addChild(b);
+  shoortSound.play();
+}
+
 function gameLoop(){
   if (paused) return; // keep this commented out for now
 
