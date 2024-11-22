@@ -42,7 +42,7 @@ class Bullet extends PIXI.Graphics {
         this.fill(color);
         this.x = x;
         this.y = y;
-        // Variables
+        // variables
         this.fwd = { x: 0, y: -1 };
         this.speed = 400;
         this.isAlive = true;
