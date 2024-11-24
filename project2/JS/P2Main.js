@@ -12,6 +12,14 @@ window.onload = (e) => {document.querySelector("#search").onclick = findData;
                             selectionChange(); }
                         };
 
+window.addEventListener("keydown", keyPressed);
+
+function keyPressed(e) {
+    if (e.code == "Enter") {
+        findData();
+    }
+}
+
 let optionSelector = null;
 let optionSelection = null;
 let searchTerm = null;

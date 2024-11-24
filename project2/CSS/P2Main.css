@@ -2,6 +2,10 @@
     background-color: aliceblue;
 }
 
+#UI {
+    position: fixed;
+}
+
 #option {
     grid-area: UI;
 }
@@ -33,7 +37,7 @@ body {
 #pokemon {
     display: flex;
     flex-direction: column;
-    max-width: 350px;
+    max-width: 250px;
 }
 
 #pokemon img {
