@@ -128,24 +128,30 @@ function dataLoaded(e){
     let xhr = e.target;
 
     if (xhr.status == 404) {
-        content.innerHTML = "No Pokemon to display!";
+        content.innerHTML = "No Pokemon by that name!";
     } else {
         let obj = JSON.parse(xhr.responseText);
-        console.log(obj);
 
         let returnable = "";
 
         if (optionSelection == "pokemon") {
-            returnable = makePokemon(obj);
+            if (searchTerm.childNodes[2].value) {
+                returnable = makePokemon(obj);
+            } else {
+                returnable = "Please enter a Pokemon's name";
+            }
         }
         else {
             content.innerHTML = "";
 
             pokemonList = obj.pokemon;
             
-            for (let i = 0; i < document.querySelector("#resultLimit").value && pokemonList.length; i++)
-            {
-                getPokemon(pokemonList[i].pokemon.url);
+            if (document.querySelector("#resultLimit").value == "" || document.querySelector("#resultLimit").value <= 0) {
+                returnable = "Please enter a positive/complete number"
+            } else {
+                for (let i = 0; i < document.querySelector("#resultLimit").value && pokemonList.length; i++) {
+                    getPokemon(pokemonList[i].pokemon.url);
+                }
             }
         }
 
@@ -154,8 +160,7 @@ function dataLoaded(e){
 }
 
 function dataError(e){
-    console.log("An error occured");
-    content = "No Pokemon to display!";
+    content = "No Pokemon by that name!";
 }
 
 function getPokemon(url){
@@ -175,7 +180,6 @@ function addPokemon(e){
     let xhr = e.target;
 
     let obj = JSON.parse(xhr.responseText);
-    console.log(obj);
 
     let returnable = "";
     returnable = makePokemon(obj);
@@ -184,6 +188,10 @@ function addPokemon(e){
 }
 
 function makePokemon(obj) {
+    if (optionSelection == "pokemon" && searchTerm.childNodes[2].value.toLowerCase().replace(" ", "-") == "") {
+        content.innerHTML = "Please enter a Pokemon's name";
+        return null;
+    }
     let returnable = `<div id='pokemon' style="background-color:` + getColor(obj.types[0].type.name) + `">`;
     let pokemonImage = obj.sprites.front_default;
     returnable += `<img src='${pokemonImage}' title='pokemon_image' style="background-color:` + getColor(obj.types[0].type.name) + `"><br>`;
