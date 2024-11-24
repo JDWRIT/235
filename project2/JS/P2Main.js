@@ -3,9 +3,9 @@ window.onload = (e) => {document.querySelector("#search").onclick = findData;
                         optionSelector = document.querySelector("#option");
                         optionSelection = optionSelector.value;
                         searchTerm = document.querySelector("#searchterm");
-                        searchTerm.innerHTML = `Search Term -> <input type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
-                        if (localStorage.getItem("jsd3713-searchTerm") != "") { searchTerm.childNodes[1].value = localStorage.getItem("jsd3713-searchTerm"); }
-                        searchTerm.childNodes[1].onchange = e => { localStorage.setItem("jsd3713-searchTerm", e.target.value); };
+                        searchTerm.innerHTML = `<h3>Pokemon's name: </h3> <input type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
+                        if (localStorage.getItem("jsd3713-searchTerm") != "") { searchTerm.childNodes[2].value = localStorage.getItem("jsd3713-searchTerm"); }
+                        searchTerm.childNodes[2].onchange = e => { localStorage.setItem("jsd3713-searchTerm", e.target.value); };
                         content = document.querySelector("#content");
                         if (localStorage.getItem("jsd3713-optionSelection")) { 
                             optionSelector.value = localStorage.getItem("jsd3713-optionSelection");
@@ -32,12 +32,12 @@ function selectionChange(){
 
     if (optionSelection == "pokemon")
     {
-        searchTerm.innerHTML = `Search Term -> <input type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
-        searchTerm.childNodes[1].value = localStorage.getItem("jsd3713-searchTerm");
-        searchTerm.childNodes[1].onchange = e => { localStorage.setItem("jsd3713-searchTerm", e.target.value); };
+        searchTerm.innerHTML = `<h3>Pokemon's name: </h3> <input type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
+        searchTerm.childNodes[2].value = localStorage.getItem("jsd3713-searchTerm");
+        searchTerm.childNodes[2].onchange = e => { localStorage.setItem("jsd3713-searchTerm", e.target.value); };
     }
     else if (optionSelection == "ability") {
-        searchTerm.innerHTML = `Ability options -> `
+        searchTerm.innerHTML = `<h3>Pokemon's ability: </h3> `
         searchTerm.innerHTML += `<select id="selector">
                                 <option value="stench" selected>Stench</option>
                                 <option value="speed-boost">Speed Boost</option>
@@ -60,14 +60,14 @@ function selectionChange(){
                                 <option value="early-bird">Early Bird</option>
                                 <option value="chlorophyll">Chlorophyll</option>
                             </select>`;
-        searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
+        searchTerm.innerHTML += `<h3>Max number of results: </h3> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
         if (localStorage.getItem("jsd3713-selectedOptionAbility")) { document.querySelector("#selector").value = localStorage.getItem("jsd3713-selectedOptionAbility"); }
         if (localStorage.getItem("jsd3713-displayCountAbility")) { document.querySelector("#resultLimit").value = localStorage.getItem("jsd3713-displayCountAbility"); }
         document.querySelector("#selector").onchange = e => { localStorage.setItem("jsd3713-selectedOptionAbility", e.target.value); };
         document.querySelector("#resultLimit").onchange = e => { localStorage.setItem("jsd3713-displayCountAbility", e.target.value); };
     }
     else {
-        searchTerm.innerHTML = `Type options ->`;
+        searchTerm.innerHTML = `<h3>Pokemon's type: </h3> `;
         searchTerm.innerHTML += `<select id="selector">
                                 <option value="normal" selected>Normal</option>
                                 <option value="fighting">Fighting</option>
@@ -88,7 +88,7 @@ function selectionChange(){
                                 <option value="dark">Dark</option>
                                 <option value="fairy">Fairy</option>
                             </select>`;
-        searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
+        searchTerm.innerHTML += `<h3>Max number of results: </h3> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
         if (localStorage.getItem("jsd3713-selectedOptionType")) { document.querySelector("#selector").value = localStorage.getItem("jsd3713-selectedOptionType"); }
         if (localStorage.getItem("jsd3713-displayCountType")) { document.querySelector("#resultLimit").value = localStorage.getItem("jsd3713-displayCountType"); }
         document.querySelector("#selector").onchange = e => { localStorage.setItem("jsd3713-selectedOptionType", e.target.value); };
@@ -103,7 +103,7 @@ function findData(){
 
     url += optionSelection;
 
-    let term = searchTerm.childNodes[1].value.toLowerCase().replace(" ", "-");
+    let term = searchTerm.childNodes[2].value.toLowerCase().replace(" ", "-");
     displayTerm = term;
 
     term = term.trim();
