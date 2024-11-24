@@ -31,8 +31,25 @@ function selectionChange(){
     else if (optionSelection == "ability") {
         searchTerm.innerHTML = `Ability options -> `
         searchTerm.innerHTML += `<select id="selector">
-                                <option value="early-bird" selected>Early Bird</option>
+                                <option value="stench" selected>Stench</option>
+                                <option value="speed-boost">Speed Boost</option>
+                                <option value="battle-armor">Battle Armor</option>
+                                <option value="sturdy">Sturdy</option>
                                 <option value="damp">Damp</option>
+                                <option value="limber">Limber</option>
+                                <option value="sand-veil">Sand Veil</option>
+                                <option value="static">Static</option>
+                                <option value="volt-absorb">Volt Absorb</option>
+                                <option value="water-absorb">Water Absorb</option>
+                                <option value="oblivious">Oblivious</option>
+                                <option value="cloud-nine">Cloud Nine</option>
+                                <option value="compound-eyes">Compound Eyes</option>
+                                <option value="insomnia">Insomnia</option>
+                                <option value="immunity">Immunity</option>
+                                <option value="flash-fire">Flash Fire</option>
+                                <option value="shield-dust">Shield Dust</option>
+                                <option value="own-tempo">Own Tempo</option>
+                                <option value="early-bird">Early Bird</option>
                                 <option value="chlorophyll">Chlorophyll</option>
                             </select>`;
         searchTerm.innerHTML += `<br>Result limit -> <input id="resultLimit" type="number" size="20" maxlength="20" autofocus value="5" />`
