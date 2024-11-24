@@ -46,3 +46,12 @@ body {
     width: 100%;
     box-shadow: 0 4px 5px 0;
 }
+
+#pokemon p {
+    margin: auto;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-size: 25px;
+    max-width: 80%;
+    font-family: "Boogaloo", sans-serif;
+}

@@ -187,11 +187,13 @@ function makePokemon(obj) {
     let returnable = `<div id='pokemon' style="background-color:` + getColor(obj.types[0].type.name) + `">`;
     let pokemonImage = obj.sprites.front_default;
     returnable += `<img src='${pokemonImage}' title='pokemon_image' style="background-color:` + getColor(obj.types[0].type.name) + `"><br>`;
+    returnable += `<p style="background-color:` + getColor(obj.types[0].type.name) + `">`;
     returnable += "Name: " + obj.name.replace("-", " ") + `<br>`;
     returnable += "HP: " + obj.stats[0].base_stat + `<br>`;
     returnable += "Attack: " + obj.stats[1].base_stat + `<br>`;
     returnable += "Defense: " + obj.stats[2].base_stat + `<br>`;
     returnable += "Speed: " + obj.stats[5].base_stat + `<br>`;
+    returnable += `</p>`;
     returnable += `</div>`
     return returnable;
 }
