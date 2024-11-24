@@ -184,9 +184,9 @@ function addPokemon(e){
 }
 
 function makePokemon(obj) {
-    let returnable = `<div id='pokemon'>`;
+    let returnable = `<div id='pokemon' style="background-color:` + getColor(obj.types[0].type.name) + `">`;
     let pokemonImage = obj.sprites.front_default;
-    returnable += `<img src='${pokemonImage}' title='pokemon_image' /><br>`;
+    returnable += `<img src='${pokemonImage}' title='pokemon_image' style="background-color:` + getColor(obj.types[0].type.name) + `"><br>`;
     returnable += "Name: " + obj.name.replace("-", " ") + `<br>`;
     returnable += "HP: " + obj.stats[0].base_stat + `<br>`;
     returnable += "Attack: " + obj.stats[1].base_stat + `<br>`;
@@ -194,4 +194,61 @@ function makePokemon(obj) {
     returnable += "Speed: " + obj.stats[5].base_stat + `<br>`;
     returnable += `</div>`
     return returnable;
+}
+
+function getColor(type) {
+    if (type == "fighting") {
+        return "#ff8000";
+    }
+    else if (type == "flying") {
+        return "#81b9ef";
+    }
+    else if (type == "poison") {
+        return "#9141cb";
+    }
+    else if (type == "ground") {
+        return "#915121";
+    }
+    else if (type == "rock") {
+        return "#afa981";
+    }
+    else if (type == "bug") {
+        return "#90a018";
+    }
+    else if (type == "ghost") {
+        return "#704170";
+    }
+    else if (type == "steel") {
+        return "#60a1b8";
+    }
+    else if (type == "fire") {
+        return "#e62829";
+    }
+    else if (type == "water") {
+        return "#2980ef";
+    }
+    else if (type == "grass") {
+        return "#3fa129";
+    }
+    else if (type == "electric") {
+        return "#fabf00";
+    }
+    else if (type == "psychic") {
+        return "#ef4179";
+    }
+    else if (type == "ice") {
+        return "#3dcef3";
+    }
+    else if (type == "dragon") {
+        return "#5060e1";
+    }
+    else if (type == "dark") {
+        return "#624d4e";
+    }
+    else if (type == "fairy") {
+        return "#ef70ef";
+    }
+    else {
+        return "#9fa19f";
+    }
 }
