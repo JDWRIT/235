@@ -1,3 +1,4 @@
+// Set all the necessary fields and autofill localStorage if applicable
 window.onload = (e) => {document.querySelector("#search").onclick = findData;
                         document.querySelector("#option").onchange = selectionChange;
                         optionSelector = document.querySelector("#option");
@@ -14,18 +15,21 @@ window.onload = (e) => {document.querySelector("#search").onclick = findData;
 
 window.addEventListener("keydown", keyPressed);
 
+// The "Enter" key now functions like the search button
 function keyPressed(e) {
     if (e.code == "Enter") {
         findData();
     }
 }
 
+// Fields
 let optionSelector = null;
 let optionSelection = null;
 let searchTerm = null;
 let pokemonList = null;
 let content = null;
 
+// When you change the search type, it will alter the UI for that type
 function selectionChange(){
     optionSelection = optionSelector.value
     localStorage.setItem("jsd3713-optionSelection", optionSelector.value);
@@ -96,6 +100,7 @@ function selectionChange(){
     }
 }
 
+// Make the url
 function findData(){
     const POKE_URL = "https://pokeapi.co/api/v2/";
 
@@ -113,6 +118,7 @@ function findData(){
     getData(url);
 }
 
+// Use the url to get data
 function getData(url){
     let xhr = new XMLHttpRequest();
 
@@ -124,6 +130,7 @@ function getData(url){
     xhr.send();
 }
 
+// Display pokemon or an "error message" to the user prompting a change in their input
 function dataLoaded(e){
     let xhr = e.target;
 
@@ -159,10 +166,12 @@ function dataLoaded(e){
     }
 }
 
+// If there is an error in the API request
 function dataError(e){
     content = "No Pokemon by that name!";
 }
 
+// Gets a specific pokemon from a url
 function getPokemon(url){
     let xhr = new XMLHttpRequest();
 
@@ -176,6 +185,7 @@ function getPokemon(url){
     xhr.send();
 }
 
+// Adds a pokemon to the "content" div
 function addPokemon(e){
     let xhr = e.target;
 
@@ -187,6 +197,7 @@ function addPokemon(e){
     document.querySelector("#content").innerHTML += returnable
 }
 
+// Makes a pokemon from the given data
 function makePokemon(obj) {
     if (optionSelection == "pokemon" && searchTerm.childNodes[2].value.toLowerCase().replace(" ", "-") == "") {
         content.innerHTML = "Please enter a Pokemon's name";
@@ -206,6 +217,7 @@ function makePokemon(obj) {
     return returnable;
 }
 
+// Returns a color based on a pokemon's type
 function getColor(type) {
     if (type == "fighting") {
         return "#ff8000";
