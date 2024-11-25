@@ -4,10 +4,15 @@
 
 #UI {
     position: fixed;
+    font-family: "Prompt", sans-serif;
 }
 
 #option {
     grid-area: UI;
+    padding: 5px 2px;
+    border-radius: 4px;
+    border: 2px solid #002a38;
+    background-image: url("../images/pokeballBackground.png");
 }
 
 #searchTerm {
@@ -17,6 +22,29 @@
 #search {
     grid-area: UI;
     margin-top: 30px;
+    background-image: url("../images/pokeballBackgroundLarge.png");
+    font-size: 16px;
+    padding: 40px 24px;
+    border-radius: 100%;
+    border: 2px solid #002a38;
+}
+
+#search:hover {
+    background-image: none;
+    background-color: rgb(255, 72, 72);
+    color: #e4e4e4;
+}
+
+#search:focus {
+    background-image: none;
+    background-color: rgb(255, 72, 72);
+    color: #e4e4e4;
+}
+
+#search:active {
+    background-image: none;
+    background-color: black;
+    color: #e4e4e4;
 }
 
 body {
@@ -54,4 +82,25 @@ body {
     font-size: 25px;
     max-width: 80%;
     font-family: "Boogaloo", sans-serif;
+}
+
+#resultLimit {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 2px solid #002a38;
+    background-image: url("../images/pokeballBackground.png");
+}
+
+#selector {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 2px solid #002a38;
+    background-image: url("../images/pokeballBackground.png");
+}
+
+#name {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 2px solid #002a38;
+    background-image: url("../images/pokeballBackground.png");
 }

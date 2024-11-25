@@ -3,7 +3,7 @@ window.onload = (e) => {document.querySelector("#search").onclick = findData;
                         optionSelector = document.querySelector("#option");
                         optionSelection = optionSelector.value;
                         searchTerm = document.querySelector("#searchterm");
-                        searchTerm.innerHTML = `<h3>Pokemon's name: </h3> <input type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
+                        searchTerm.innerHTML = `<h3>Pokemon's name: </h3> <input id="name" type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
                         if (localStorage.getItem("jsd3713-searchTerm") != "") { searchTerm.childNodes[2].value = localStorage.getItem("jsd3713-searchTerm"); }
                         searchTerm.childNodes[2].onchange = e => { localStorage.setItem("jsd3713-searchTerm", e.target.value); };
                         content = document.querySelector("#content");
@@ -32,7 +32,7 @@ function selectionChange(){
 
     if (optionSelection == "pokemon")
     {
-        searchTerm.innerHTML = `<h3>Pokemon's name: </h3> <input type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
+        searchTerm.innerHTML = `<h3>Pokemon's name: </h3> <input id="name" type="text" size="20" maxlength="20" autofocus value="pikachu" />`;
         searchTerm.childNodes[2].value = localStorage.getItem("jsd3713-searchTerm");
         searchTerm.childNodes[2].onchange = e => { localStorage.setItem("jsd3713-searchTerm", e.target.value); };
     }
