@@ -1,0 +1,15 @@
+html {
+    background-color: rgb(119, 0, 0);
+}
+
+body {
+    position: relative;
+    width: 80%;
+    left: 10%;
+    background-color: rgb(150, 150, 255);
+    padding: 1rem;
+}
+
+h1 {
+    font-size: 5rem;
+}
