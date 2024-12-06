@@ -9,32 +9,34 @@ let assets;
 
 let sceneWidth, sceneHeight;
 
-
-
 // game variables
-let startScene;
-let gameScene, ship, scoreLabel, lifeLabel, gameOverScoreLabel, shootSound, hitSound, fireballSound;
-let gameOverScene;
+let turn = "x";
 
-let circles = [];
-let bullets = [];
-let aliens = [];
-let explosions = [];
-let explosionTextures;
-let score = 0;
-let life = 100;
-let levelNum = 1;
-let paused = true;
+let board = [["e","e","e"],
+             ["e","e","e"],
+             ["e","e","e"]];
+
+window.addEventListener("keydown", keyPressed);
+
+// The "Enter" key now functions like the search button
+function keyPressed(e) {
+    if (e.code == "KeyR") {
+        location.reload();
+    }
+}             
 
 // Load all assets
-//loadImages();
+loadImages();
 
 async function loadImages() {
-  /*// https://pixijs.com/8.x/guides/components/assets#loading-multiple-assets
+  // https://pixijs.com/8.x/guides/components/assets#loading-multiple-assets
   PIXI.Assets.addBundle("sprites", {
-    spaceship: "images/spaceship.png",
-    explosions: "images/explosions.png",
-    move: "images/move.png",
+    boardImage: "images/TicTacToeBoardBasic.png",
+    boardTileImage: "images/TicTacToeBoardBasicTile.png",
+    oImage: "images/TTTOBasic.png",
+    xImage: "images/TTTXBasic.png",
+    oWins: "images/TicTacToeBoardBasicOWins.png",
+    xWins: "images/TicTacToeBoardBasicXWins.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -42,7 +44,7 @@ async function loadImages() {
     console.log(`progress=${(progress * 100).toFixed(2)}%`); // 0.4288 => 42.88%
   });
 
-  setup();*/
+  setup();
 }
 
 async function setup() {
@@ -54,27 +56,92 @@ async function setup() {
   sceneWidth = app.renderer.width;
   sceneHeight = app.renderer.height;
 
-  // #1 - Create the `start` scene
-  startScene = new PIXI.Container();
-  stage.addChild(startScene);
+  // Make greater board
+  let boardVisual = new PIXI.Sprite(assets.boardImage);
+  boardVisual.width = 600;
+  boardVisual.height = 600;
+  stage.addChild(boardVisual);
 
-  // #8 - Start update loop
-  app.ticker.add(gameLoop);
+  // Create board tiles
+  for(let y = 0; y < 3; y++) {
+    for (let x = 0; x < 3; x++) {
+      let boardTile = new Tile(assets.boardTileImage, 30 + (x*192), 30 + (y*192), { x: x, y: y});
+      stage.addChild(boardTile);
+    }
+  }
 }
 
-function createLabelsAndButtons() {
-  // 1C make start game button
-  let startButton = new PIXI.Text("Enter, if you dare!", buttonStyle);
-  startButton.x = sceneWidth / 2 - startButton.width / 2;
-  startButton.y = sceneHeight - 100;
-  startButton.interactive = true;
-  startButton.buttonMode = true;
-  startButton.on("pointerup", startGame); //startGame is a funcion reference
-  startButton.on("pointerover", (e) => (e.target.alpha = 0.7)); // conccise arrow function with no brackets
-  startButton.on("pointerout", (e) => (e.currentTarget.alpha = 1.0)); //ditto
-  startScene.addChild(startButton);
+function takeSpace(tileNumbers, tile) {
+    if (board[tileNumbers.x][tileNumbers.y] == "e") {
+      board[tileNumbers.x][tileNumbers.y] = turn;
+      if (turn == "x") {
+        makeXO("x", tile);
+        turn = "o";
+      } else {
+        makeXO("o", tile);
+        turn = "x";
+      }
+    }
 }
 
-function gameLoop(){
-  
+function makeXO(XorO, tile) {
+  let XO;
+  if (XorO == "x") {
+    XO = new PIXI.Sprite(assets.xImage);
+  } else {
+    XO = new PIXI.Sprite(assets.oImage);
+  }
+  XO.width = 156;
+  XO.height = 156;
+  XO.x = tile.x;
+  XO.y = tile.y;
+  stage.addChild(XO);
+  checkForWinner();
+}
+
+function checkForWinner() {
+  for (let x = 0; x < 3; x++) {
+    if (board[x][0] != "e" && board[x][0] == board[x][1] && board[x][1] == board[x][2]) {
+      pronounceWinner(board[x][0]);
+      return;
+    }
+  }
+  for (let y = 0; y < 3; y++) {
+    if (board[0][y] != "e" && board[0][y] == board[1][y] && board[1][y] == board[2][y]) {
+      pronounceWinner(board[0][y]);
+      return;
+    }
+  }
+  if (board[0][0] != "e" && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+    pronounceWinner(board[0][0]);
+    return;
+  }
+  else if (board[0][2] != "e" && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+    pronounceWinner(board[2][0]);
+    return;
+  }
+
+  let emptySlots = 0;
+  board.forEach((item) => {
+    item.forEach((innerItem) => {
+      if (innerItem == "e") {
+        emptySlots++;
+      }
+    })
+  });
+  if (emptySlots == 0) {
+    location.reload();
+  }
+}
+
+function pronounceWinner(winner) {
+  let winDisplay;
+  if (winner == "x") {
+    winDisplay = new PIXI.Sprite(assets.xWins);
+  } else {
+    winDisplay = new PIXI.Sprite(assets.oWins);
+  }
+  winDisplay.width = 600;
+  winDisplay.height = 600;
+  stage.addChild(winDisplay);
 }
