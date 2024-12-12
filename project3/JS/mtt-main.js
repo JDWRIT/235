@@ -10,14 +10,18 @@ let assets;
 let sceneWidth, sceneHeight;
 
 // game variables
-let turn = "x";
+let turn = "X";
 
 let board = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 let onBoard = [];
+let tokens = [];
 let inputs = [false, false, false, false]
+let mechX, mechO, endTurn;
+let mechXUI, mechOUI;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
+window.addEventListener("mouseup", reloadMechText);
 
 // The "Enter" key now functions like the search button
 function keyDown(e) {
@@ -59,8 +63,9 @@ async function loadImages() {
     mttWhiteTile: "images/MTTTileWhite.png",
     mttOMech: "images/MTTO.png",
     mttXMech: "images/MTTX.png",
-    mttOMarker: "images/MTTTravelMarkerO",
-    mttXMarker: "images/MTTTravelMarkerX"
+    mttOMarker: "images/MTTTravelMarkO.png",
+    mttXMarker: "images/MTTTravelMarkX.png",
+    endTurn: "images/EndTurn.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -90,12 +95,37 @@ async function setup() {
   }
 
   // Make mechs
-  let mechX = new Mech(assets.mttXMech, [0, 0], "X");
+  mechX = new Mech(assets.mttXMech, [0, 0], "X");
   onBoard.push(mechX);
   stage.addChild(mechX);
-  let mechO = new Mech(assets.mttOMech, [14, 14], "O");
+  mechO = new Mech(assets.mttOMech, [14, 14], "O");
   onBoard.push(mechO);
   stage.addChild(mechO);
+
+  // Make UI
+  mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration, {
+    fill: 0xffffff,
+    fontSize: 40,
+    fontFamily: "Arial",
+    stroke: 0xff0000,
+    strokeThickness: 6,
+  });
+  mechXUI.visible = false;
+  stage.addChild(mechXUI);
+  mechOUI = new PIXI.Text("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration, {
+    fill: 0xffffff,
+    fontSize: 40,
+    fontFamily: "Arial",
+    stroke: 0xff0000,
+    strokeThickness: 6,
+  });
+  mechOUI.visible = false;
+  stage.addChild(mechOUI);
+
+  endTurn = new EndTurn(assets.endTurn);
+  endTurn.x = sceneWidth - endTurn.width;
+  endTurn.y = sceneHeight - endTurn.height + 50;
+  stage.addChild(endTurn);
 
   app.ticker.add(gameLoop);
 }
@@ -127,20 +157,112 @@ function moveBoardElements(dt, direction){
     for (let thing in onBoard) {
         onBoard[thing].move(dt, direction);
     }
+    if (tokens.length > 0) {
+        for (let token in tokens) {
+            tokens[token].move(dt, direction);
+        }
+    }
 }
 
 function displayMechData(mech){
-    console.log("displayMechData!");
     console.log("Clicked: " + mech.team)
+    if (mech.team == "X") {
+        mechXUI.visible = true;
+
+        if (mech.energy > 0) {
+            if (mech.tileNumber[0] - 1 >= 0) {
+                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "X");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+            if (mech.tileNumber[0] + 1 <= 15) {
+                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "X");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+            if (mech.tileNumber[1] - 1 >= 0) {
+                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "X");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+            if (mech.tileNumber[1] + 1 <= 15) {
+                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "X");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+        }
+    }
+    else {
+        mechOUI.visible = true;
+
+        if (mech.energy > 0) {
+            if (mech.tileNumber[0] - 1 >= 0) {
+                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "O");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+            if (mech.tileNumber[0] + 1 <= 14) {
+                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "O");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+            if (mech.tileNumber[1] - 1 >= 0) {
+                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "O");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+            if (mech.tileNumber[1] + 1 <= 14) {
+                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "O");
+                tokens.push(moveToken);
+                stage.addChild(moveToken);
+            }
+        }
+    }
 }
 
 function stopDisplayingMechData(mech){
-    console.log("stopDisplayingMechData!");
-    console.log("Unclicked: " + mech.team)
+
 }
 
 function deselectAll(){
     for (let thing in onBoard) {
         onBoard[thing].deselect();
+    }
+    if (tokens.length > 0) {
+        for (let token in tokens) {
+            tokens[token].deselect();
+        }
+        tokens = [];
+    }
+    mechXUI.visible = false;
+    mechOUI.visible = false;
+}
+
+function moveMech(team, tileNumber) {
+    if (team == "X") {
+        mechX.moveMech(tileNumber);
+        for (let token in tokens) {
+                tokens[token].deselect();
+        }
+        tokens = [];
+    }
+    else {
+        mechO.moveMech(tileNumber);
+        for (let token in tokens) {
+            tokens[token].deselect();
+        }
+        tokens = [];
+    }
+}
+
+function reloadMechText() {
+    mechXUI.text = ("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration);
+    mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration);
+}
+
+function rejuvinate(mech) {
+    mech.energy += mech.energyRegeneration;
+    if (mech.energy > mech.energyCapacity) {
+        mech.energy = mech.energyCapacity;
     }
 }

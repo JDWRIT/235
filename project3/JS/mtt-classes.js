@@ -46,11 +46,80 @@ class Mech extends PIXI.Sprite {
     }
 
     select() {
-        deselectAll();
-        displayMechData(this)
+        if (turn == this.team) {
+            deselectAll();
+            displayMechData(this)
+        }
     }
 
     deselect() {
         stopDisplayingMechData(this);
+    }
+
+    moveMech(tileNumber){
+        this.tileNumber = tileNumber;
+        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = tilePosition.x;
+        this.y = tilePosition.y;
+        this.energy--;
+    }
+}
+
+class MovementToken extends PIXI.Sprite {
+    constructor(texture, tileNumber, team) {
+        super(texture);
+        this.tileNumber = tileNumber;
+        this.anchor.set(0.5, 0.5);
+        this.width = 100;
+        this.height = 100;
+        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = tilePosition.x;
+        this.y = tilePosition.y;
+        this.speed = 50;
+        this.team = team;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+    }
+
+    move(dt = 1 / 60, direction = [0, 0]) {
+        this.x += direction[0] * this.speed * dt;
+        this.y += direction[1] * this.speed * dt;
+    }
+
+    select() {
+        moveMech(this.team, this.tileNumber);
+    }
+
+    deselect() {
+        stage.removeChild(this)
+    }
+}
+
+class EndTurn extends PIXI.Sprite {
+    constructor(texture) {
+        super(texture);
+        this.width = 150;
+        this.height = 150;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+    }
+    
+    select() {
+        console.log(":)");
+        console.log(turn);
+        if (turn == "X") {
+            turn = "O";
+            rejuvinate(mechO);
+            deselectAll();
+        }
+        else {
+            turn = "X";
+            rejuvinate(mechX);
+            deselectAll();
+        }
     }
 }
