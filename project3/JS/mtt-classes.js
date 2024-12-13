@@ -35,6 +35,7 @@ class Mech extends PIXI.Sprite {
         this.energyCapacity = 4;
         this.energy = 3;
         this.energyRegeneration = 3;
+        this.ore = 0;
         this.interactive = true;
         this.buttonMode = true;
         this.on("click", this.select); // clicked
@@ -94,6 +95,12 @@ class MovementToken extends PIXI.Sprite {
 
     select() {
         moveMech(this.team, this.tileNumber);
+        if (this.team == "X" && mechX.energy > 0) {
+            displayMechData(mechX);
+        }
+        else if (this.team == "O" && mechO.energy > 0) {
+            displayMechData(mechO);
+        }
     }
 
     deselect() {
@@ -294,5 +301,94 @@ class HSMPower extends PIXI.Sprite {
         else {
             this.texture = assets.hsmPowerNull;
         }
+    }
+}
+
+class Ore extends PIXI.Sprite {
+    constructor(tileNumber) {
+        super(assets.oreImage);
+        this.tileNumber = tileNumber;
+        this.anchor.set(0.5, 0.5);
+        this.width = 175;
+        this.height = 175;
+        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = tilePosition.x;
+        this.y = tilePosition.y;
+        this.speed = 50;
+        this.ore = 3;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+        board[this.tileNumber[0]][this.tileNumber[1]].content = this;
+    }
+
+    move(dt = 1 / 60, direction = [0, 0]) {
+        this.x += direction[0] * this.speed * dt;
+        this.y += direction[1] * this.speed * dt;
+    }
+
+    select() {
+        let check = this.proximityCheck();
+        if (check) {
+            if (turn == "X" && mechX.energy > 0) {
+                mechX.ore += 1;
+                mechX.energy -= 1;
+                this.ore -= 1;
+                reloadMechText();
+                if (this.ore <= 0) {
+                    this.visible = false;
+                    board[this.tileNumber[0]][this.tileNumber[1]].content = null;
+                }
+                if (mechX.energy <= 0) {
+                    for (let token in tokens) {
+                        tokens[token].deselect();
+                    }
+                    tokens = [];
+                }
+            }
+            else if (turn == "O" && mechO.energy > 0) {
+                mechX.ore += 1;
+                mechX.energy -= 1;
+                this.ore -= 1;
+                reloadMechText();
+                if (this.ore <= 0) {
+                    this.visible = false;
+                    board[this.tileNumber[0]][this.tileNumber[1]].content = null;
+                }
+                if (mechO.energy <= 0) {
+                    for (let token in tokens) {
+                        tokens[token].deselect();
+                    }
+                    tokens = [];
+                }
+            }
+        }
+    }
+
+    proximityCheck() {
+        if (turn == "X") {
+            for (let y = -1; y < 2; y++) {
+                for (let x = -1; x < 2; x++) {
+                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechX) {
+                        return true;
+                    }
+                }
+            }
+        }
+        else {
+            for (let y = -1; y < 2; y++) {
+                for (let x = -1; x < 2; x++) {
+                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    deselect() {
+        
     }
 }

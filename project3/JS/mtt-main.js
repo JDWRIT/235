@@ -75,7 +75,8 @@ async function loadImages() {
     hsmPowerX: "images/HSMPowerX.png",
     hsmPowerO: "images/HSMPowerO.png",
     oWins: "images/TicTacToeBoardBasicOWins.png",
-    xWins: "images/TicTacToeBoardBasicXWins.png"
+    xWins: "images/TicTacToeBoardBasicXWins.png",
+    oreImage: "images/Ore.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -113,18 +114,18 @@ async function setup() {
   stage.addChild(mechO);
 
   // Make UI
-  mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration, {
+  mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration + " | Ore: " + mechX.ore, {
     fill: 0xffffff,
-    fontSize: 40,
+    fontSize: 35,
     fontFamily: "Arial",
     stroke: 0xff0000,
     strokeThickness: 6,
   });
   mechXUI.visible = false;
   stage.addChild(mechXUI);
-  mechOUI = new PIXI.Text("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration, {
+  mechOUI = new PIXI.Text("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration + " | Ore: " + mechO.ore, {
     fill: 0xffffff,
-    fontSize: 40,
+    fontSize: 35,
     fontFamily: "Arial",
     stroke: 0xff0000,
     strokeThickness: 6,
@@ -134,7 +135,7 @@ async function setup() {
 
   turnUI = new PIXI.Text("Turn: X", {
     fill: 0xffffff,
-    fontSize: 40,
+    fontSize: 35,
     fontFamily: "Arial",
     stroke: 0xff0000,
     strokeThickness: 6,
@@ -153,6 +154,10 @@ async function setup() {
         makeHSM([(x * 5) + 2,(y * 5) + 2], x, y);
     }
   }
+
+  // Make ore
+  let ore = new Ore([1, 1]);
+  stage.addChild(ore);
 
   app.ticker.add(gameLoop);
 }
@@ -298,8 +303,8 @@ function moveMech(team, tileNumber) {
 }
 
 function reloadMechText() {
-    mechXUI.text = ("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration);
-    mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration);
+    mechXUI.text = ("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration  + " | Ore: " + mechX.ore);
+    mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration  + " | Ore: " + mechX.ore);
 }
 
 function rejuvinate(mech) {
