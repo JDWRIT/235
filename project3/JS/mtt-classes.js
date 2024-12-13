@@ -381,8 +381,8 @@ class Ore extends PIXI.Sprite {
                 }
             }
             else if (turn == "O" && mechO.energy > 0) {
-                mechX.ore += 1;
-                mechX.energy -= 1;
+                mechO.ore += 1;
+                mechO.energy -= 1;
                 oreGrind.play();
                 this.ore -= 1;
                 reloadMechText();
