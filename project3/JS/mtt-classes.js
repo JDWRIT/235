@@ -35,7 +35,7 @@ class Mech extends PIXI.Sprite {
         this.energyCapacity = 4;
         this.energy = 3;
         this.energyRegeneration = 3;
-        this.ore = 100;
+        this.ore = 0;
         this.interactive = true;
         this.buttonMode = true;
         this.type = "Mech";
@@ -67,8 +67,6 @@ class Mech extends PIXI.Sprite {
         this.x = tilePosition.x;
         this.y = tilePosition.y;
         tilePosition.content = this;
-        console.log("tile num " + tilePosition.tileNumber);
-        console.log("tile pos y " + tilePosition.y);
         this.energy--;
     }
 }
@@ -114,8 +112,8 @@ class MovementToken extends PIXI.Sprite {
 class EndTurn extends PIXI.Sprite {
     constructor(texture) {
         super(texture);
-        this.width = 150;
-        this.height = 41.4;
+        this.width = 250;
+        this.height = 69;
         this.interactive = true;
         this.buttonMode = true;
         this.on("click", this.select); // clicked
@@ -172,6 +170,23 @@ class HSM extends PIXI.Sprite {
             }
             this.visible = false;
         }
+    }
+
+    addFuel(team) {
+        for (let i = 0; i < 8; i++) {
+            if (this.hsmBack.powers[i].power == "null") {
+                if (team == "X") {
+                    this.hsmBack.powers[i].power = "X";
+                    this.hsmBack.powers[i].texture = assets.hsmPowerX;
+                }
+                else {
+                    this.hsmBack.powers[i].power = "O";
+                    this.hsmBack.powers[i].texture = assets.hsmPowerO;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     proximityCheck() {
@@ -389,8 +404,11 @@ class Ore extends PIXI.Sprite {
         else {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
-                        return true;
+                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
+                        if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -455,7 +473,7 @@ class BuildMarker extends PIXI.Sprite {
 }
 
 class Factory extends PIXI.Sprite {
-    constructor(texture, tileNumber) {
+    constructor(texture, tileNumber, team) {
         super(texture);
         this.tileNumber = tileNumber;
         this.anchor.set(0.5, 0.5);
@@ -467,6 +485,7 @@ class Factory extends PIXI.Sprite {
         this.speed = 50;
         this.hsm = null;
         this.fuel = 0;
+        this.team = team;
         this.type = "Factory";
         this.interactive = true;
         this.buttonMode = true;
@@ -509,12 +528,52 @@ class Factory extends PIXI.Sprite {
         }
     }
 
+    fill() {
+        if (this.fuel > 0 && this.hsm != null) {
+            let c = this.hsm.addFuel(this.team);
+            if (c) {
+                this.fuel -= 1;
+            }
+        }
+    }
+
     select() {
-        this.visible = false;
-        this.factoryBack.visible = true;
-        this.fillButton.visible = true;
-        this.infoText.visible = true;
-        this.infoText.text = "Fuel: " + this.fuel;
+        let check = this.proximityCheck();
+        if (check) {
+            this.visible = false;
+            this.factoryBack.visible = true;
+            this.fillButton.visible = true;
+            this.infoText.visible = true;
+            this.infoText.text = "Fuel: " + this.fuel;
+        }
+    }
+
+    proximityCheck() {
+        if (turn == "X") {
+            for (let y = -1; y < 2; y++) {
+                for (let x = -1; x < 2; x++) {
+                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
+                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
+                                return true;
+                            }
+                    }
+                }
+            }
+        }
+        else {
+            for (let y = -1; y < 2; y++) {
+                for (let x = -1; x < 2; x++) {
+                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
+                        if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     deselect() {
@@ -563,13 +622,11 @@ class FactoryFill extends PIXI.Sprite {
             this.factory.fuel += 2;
             mechX.ore -= 1;
             this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
-            console.log(this.factory.infoText);
         }
         else if (turn == "O" && mechO.ore > 0) {
             this.factory.fuel += 2;
             mechX.ore -= 1;
             this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
-            console.log(this.factory.infoText);
         }
     }
 }

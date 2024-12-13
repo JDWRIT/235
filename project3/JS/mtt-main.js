@@ -16,6 +16,7 @@ let board = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 let onBoard = [];
 let tokens = [];
 let buildMarkers = [];
+let factories = [];
 let inputs = [false, false, false, false]
 let hsms = [[],[],[]];
 let mechX, mechO, endTurn;
@@ -63,6 +64,11 @@ async function loadImages() {
   // https://pixijs.com/8.x/guides/components/assets#loading-multiple-assets
   PIXI.Assets.addBundle("sprites", {
     mttWhiteTile: "images/MTTTileWhite.png",
+    mttGreenTile: "images/MTTTileGreen.png",
+    mttGrayTile: "images/MTTTileGray.png",
+    mttLakeTile: "images/MTTTileGreenLake.png",
+    mttRiverTile: "images/MTTTileGreenRiver.png",
+    mttVolcanoTile: "images/MTTTileVolcano.png",
     mttOMech: "images/MTTO.png",
     mttXMech: "images/MTTX.png",
     mttOMarker: "images/MTTTravelMarkO.png",
@@ -88,7 +94,7 @@ async function loadImages() {
 
   // The second argument is a callback function that is called whenever the loader makes progress.
   assets = await PIXI.Assets.loadBundle("sprites", (progress) => {
-    console.log(`progress=${(progress * 100).toFixed(2)}%`); // 0.4288 => 42.88%
+    //console.log(`progress=${(progress * 100).toFixed(2)}%`); // 0.4288 => 42.88%
   });
 
   setup();
@@ -106,7 +112,7 @@ async function setup() {
   // Create board tiles
   for(let y = 0; y < 15; y++) {
     for (let x = 0; x < 15; x++) {
-      let boardTile = new Tile(assets.mttWhiteTile, [x, y]);
+      let boardTile = new Tile(boardTileColor(), [x, y]);
       board[x][y] = boardTile;
       stage.addChild(boardTile);
     }
@@ -191,6 +197,29 @@ function makeHSM(position, x, y) {
     stage.addChild(hsm);
 }
 
+function boardTileColor() {
+    let randomNumber = Math.floor(Math.random() * 101);
+
+    if (randomNumber < 50) {
+        return assets.mttGreenTile;
+    }
+    else if (randomNumber < 70) {
+        return assets.mttGrayTile;
+    }
+    else if (randomNumber < 80) {
+        return assets.mttWhiteTile;
+    }
+    else if (randomNumber < 90) {
+        return assets.mttRiverTile;
+    }
+    else if (randomNumber < 95) {
+        return assets.mttLakeTile;
+    }
+    else {
+        return assets.mttVolcanoTile;
+    }
+}
+
 function gameLoop(){
     let dt = 1 / app.ticker.FPS;
     if (dt > 1 / 12) dt = 1 / 12;
@@ -231,7 +260,6 @@ function moveBoardElements(dt, direction){
 }
 
 function displayMechData(mech){
-    console.log("Clicked: " + mech.team)
     if (mech.team == "X") {
         mechXUI.visible = true;
 
@@ -373,14 +401,15 @@ function buildOptions() {
 
 function BuildFactory(tileNumber) {
     if (turn == "X") {
-        let factory = new Factory(assets.factoryXImg ,[tileNumber[0], tileNumber[1]]);
+        let factory = new Factory(assets.factoryXImg ,[tileNumber[0], tileNumber[1]], "X");
         onBoard.push(factory);
+        factories.push(factory);
         stage.addChild(factory);
         mechX.ore -= 5;
         deselectAll();
     }
     else {
-        let factory = new Factory(assets.factoryOImg ,[tileNumber[0], tileNumber[1]]);
+        let factory = new Factory(assets.factoryOImg ,[tileNumber[0], tileNumber[1]], "O");
         onBoard.push(factory);
         stage.addChild(factory);
         mechX.ore -= 5;
@@ -400,6 +429,11 @@ function rejuvinate(mech) {
         }
     }
     turnUI.text = "Turn: " + turn;
+
+    for (let factory in factories) {
+        factories[factory].fill();
+    }
+
     checkForWinner();
 }
 
