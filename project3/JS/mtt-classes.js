@@ -35,7 +35,7 @@ class Mech extends PIXI.Sprite {
         this.speed = 50;
         this.team = team;
         this.energyCapacity = 4;
-        this.energy = 3;
+        this.energy = 4;
         this.energyRegeneration = 3;
         this.ore = 0;
         this.interactive = true;
