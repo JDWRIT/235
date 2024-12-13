@@ -26,7 +26,7 @@ window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
 window.addEventListener("mouseup", reloadMechText);
 
-// The "Enter" key now functions like the search button
+// The keys are logged when pressed down
 function keyDown(e) {
     if (e.code == "KeyW") {
         inputs[0] = true;
@@ -42,6 +42,7 @@ function keyDown(e) {
     }
 }
 
+// The keys are unlogged when released
 function keyUp(e) {
     if (e.code == "KeyW") {
         inputs[0] = false;
@@ -101,30 +102,30 @@ async function loadImages() {
 }
 
 async function setup() {
-  await app.init({ width: 950, height: 950 });
+    await app.init({ width: 950, height: 950 });
 
-  document.body.appendChild(app.canvas);
+    document.body.appendChild(app.canvas);
 
-  stage = app.stage;
-  sceneWidth = app.renderer.width;
-  sceneHeight = app.renderer.height;
+    stage = app.stage;
+    sceneWidth = app.renderer.width;
+    sceneHeight = app.renderer.height;
 
-  // Create board tiles
-  for(let y = 0; y < 15; y++) {
-    for (let x = 0; x < 15; x++) {
-      let boardTile = new Tile(boardTileColor(), [x, y]);
-      board[x][y] = boardTile;
-      stage.addChild(boardTile);
+    // Create board tiles
+    for(let y = 0; y < 15; y++) {
+        for (let x = 0; x < 15; x++) {
+        let boardTile = new Tile(boardTileColor(), [x, y]);
+        board[x][y] = boardTile;
+        stage.addChild(boardTile);
+        }
     }
-  }
 
-  // Make mechs
-  mechX = new Mech(assets.mttXMech, [0, 0], "X");
-  onBoard.push(mechX);
-  stage.addChild(mechX);
-  mechO = new Mech(assets.mttOMech, [14, 14], "O");
-  onBoard.push(mechO);
-  stage.addChild(mechO);
+    // Make mechs
+    mechX = new Mech(assets.mttXMech, [0, 0], "X");
+    onBoard.push(mechX);
+    stage.addChild(mechX);
+    mechO = new Mech(assets.mttOMech, [14, 14], "O");
+    onBoard.push(mechO);
+    stage.addChild(mechO);
 
     // Make ore
     for (let i = 0; i < 50; i++) {
@@ -190,6 +191,7 @@ async function setup() {
   app.ticker.add(gameLoop);
 }
 
+// Makes HSMs given a position, as well as an X, Y coordinate for the 3x3 HSM board
 function makeHSM(position, x, y) {
     let hsm = new HSM([position[0], position[1]]);
     hsms[y][x] = hsm;
@@ -197,6 +199,7 @@ function makeHSM(position, x, y) {
     stage.addChild(hsm);
 }
 
+// Randomizes the type of tile that spawns, although not uniformly
 function boardTileColor() {
     let randomNumber = Math.floor(Math.random() * 101);
 
@@ -220,6 +223,7 @@ function boardTileColor() {
     }
 }
 
+// Moves everything based on user inputs
 function gameLoop(){
     let dt = 1 / app.ticker.FPS;
     if (dt > 1 / 12) dt = 1 / 12;
@@ -238,6 +242,7 @@ function gameLoop(){
     }
 }
 
+// Does the actual moving that gameLoop provides information for
 function moveBoardElements(dt, direction){
     for(let y = 0; y < 15; y++) {
         for (let x = 0; x < 15; x++) {
@@ -259,6 +264,7 @@ function moveBoardElements(dt, direction){
     }
 }
 
+// Displays the information/stats for the mech and also the movement tokens
 function displayMechData(mech){
     if (mech.team == "X") {
         mechXUI.visible = true;
@@ -330,6 +336,7 @@ function displayMechData(mech){
     }
 }
 
+// Deselects everything that needs to be, this functions as a "click off" of something
 function deselectAll(){
     for (let thing in onBoard) {
         onBoard[thing].deselect();
@@ -350,6 +357,7 @@ function deselectAll(){
     mechOUI.visible = false;
 }
 
+// Moves a mech of a specific team to a tileNumber
 function moveMech(team, tileNumber) {
     if (team == "X") {
         mechX.moveMech(tileNumber);
@@ -367,11 +375,13 @@ function moveMech(team, tileNumber) {
     }
 }
 
+// Makes sure the mech info/stats text stays up-to-date
 function reloadMechText() {
     mechXUI.text = ("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration  + " | Ore: " + mechX.ore);
     mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration  + " | Ore: " + mechX.ore);
 }
 
+// Makes build markers for buildable (empty) tiles
 function buildOptions() {
     if (turn == "X" && mechX.energy > 0 && mechX.ore >= 5) {
         for (let y = -1; y < 2; y++) {
@@ -403,6 +413,7 @@ function buildOptions() {
     }
 }
 
+// Builds a factory given a tile number
 function BuildFactory(tileNumber) {
     if (turn == "X") {
         let factory = new Factory(assets.factoryXImg ,[tileNumber[0], tileNumber[1]], "X");
@@ -423,6 +434,7 @@ function BuildFactory(tileNumber) {
     
 }
 
+// Regenerates energy not surpassing the max of a mech, and also triggers the HSMs to use energy they've stored
 function rejuvinate(mech) {
     mech.energy += mech.energyRegeneration;
     if (mech.energy > mech.energyCapacity) {
@@ -442,6 +454,7 @@ function rejuvinate(mech) {
     checkForWinner();
 }
 
+// Checks if anyone has a 3-in-a-row for the HSMs
 function checkForWinner() {
     for (let x = 0; x < 3; x++) {
       if (hsms[x][0].team != "null" && hsms[x][0].team == hsms[x][1].team && hsms[x][1].team == hsms[x][2].team) {
@@ -465,7 +478,8 @@ function checkForWinner() {
     }
   }
 
-  function pronounceWinner(winner) {
+// If someone won, declare it!
+function pronounceWinner(winner) {
     let winDisplay;
     if (winner == "X") {
         winDisplay = new PIXI.Sprite(assets.xWins);
@@ -477,4 +491,4 @@ function checkForWinner() {
     winDisplay.interactive = true;
     winDisplay.buttonMode = true;
     stage.addChild(winDisplay);
-  }
+}

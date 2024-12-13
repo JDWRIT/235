@@ -1,0 +1,111 @@
+<h1>Hello and welcome</h1>
+<h3>This is my (Joshua DeWinter) documentation for IGME 235s Project 3 on game development for the web using PIXIJS!</h3>
+<br>
+<h3>My proposal:</h3>
+<h1>Mech Tac Toe</h1>
+    <h3>High Concept</h3>
+    <p>You are in control of a mech with an energy cannon. Your goal is to travel to the Holographic Symbol Markers (HSMs) 
+        around the map and put energy into them to display your symbol (there are 9 of them in total, evenly spaced around the 
+        map) and get three of them to display yours in a row (just like tic tac toe)</p>
+    <hr>
+    <h3>Genre</h3>
+    <p>The gameplay is a turn based strategy similar to the board game Scythe, although with square tiles 
+        and no diagonal movement</p>
+    <hr>
+    <h3>Platform</h3>
+    <p>Primarily made for desktop, however if time allows, a mobile version may be implemented as the game doesn't 
+        require a keyboard open at all times</p>
+    <hr>
+    <h3>Story</h3>
+    <p>The Excebon Empire and Oberche Domain are in a mortal clash over long lost technology left by their predecessor nation the
+        Orex Republic. Although much of the technology from that age has been lost to time, their descendants are left with one
+        last vestige of their power, an underground complex that served as a time capsule of their civilization and the last 
+        source of the purple energy that fueled their society. To unlock this complex however, they must pour incredible amounts
+        of energy from their mobile platforms to charge the emitters that will grant one nation access if their form of energy
+        fuels three holographic projectors in a row, and thus they battle will all their might
+    </p>
+    <h3>Aesthetics</h3>
+    <p>Likely pixel art as it can produce decent results in shorter amounts of time. The sound in the game will likely be beeps
+        and boops for selections and menus, with room for music of some kind if time allows
+    </p>
+    <hr>
+    <h3>Gameplay</h3>
+    <p>The player has energy bars that they can use up to do actions. Actions include:</p>
+    <ul>
+        <li>Movement (4 cardinal directions)</li>
+        <li>HSM/etc. filling</li>
+        <li>Resource gathering</li>
+        <li>Construction</li>
+    </ul>
+    <p>Most things are done by clicking on the screen to present options, whether in the form of highlighted tiles for movement
+        or pop-up menus for filling HSMs. Additional buttons like "End Turn" may be present at all times, however most other
+        stats and the like are displayed only upon the selection of an object
+    </p>
+    <p>When it comes to learning how to play, due to the simplicity of the games core mechanics, a simple instruction manual
+        should suffice. Although if time allows, embedded videos/GIFs displaying certain mechanics may also be added to said
+        manual for additional assistance in the learning process
+    </p>
+    <p>To win the game, simply fill three HSMs in a row and congrats you've won! Even so, filling them enough so that they
+        remain active and on your color while you make your way to the others (HSMs lose one power after every round) may prove
+        difficult, especially with the other player possibly poaching your tile. Gathering materials to place down energy
+        zappers and hidden energy mines may be worth the effort to keep your opponent from reaching their target, and building
+        energy filler factories connected to the HSM to keep pumping your color energy in can keep the HSM under your control.
+        Waste the enemies energy, and use yours effeciently to win
+    </p>
+    <hr>
+    <h3>Screenshots/Mockups</h3>
+    <img src="images/Mockup01.png" alt="MockupMainGame">
+    <img src="images/Mockup02.png" alt="MockupHSMMenu" height="750px">
+    <hr>
+    <h3>Other</h3>
+    <p>There are "Energy Cannons" on each players mech that do no damage but rather are used for energy filling, this information
+        has no real effect on gameplay except for crossing out any ideas that you can blow up the enemy mech, it's more of a
+        "fun fact"
+    </p>
+    <hr>
+    <h3>About the developer</h3>
+    <p>My name is Joshua DeWinter and I am a Second Year Game Design and Development Major at Rochester Institute of
+        Technology. I am proficient in C# and GDScript, and am in the process of improving my JavaScript and other web oriented
+        skills
+    </p>
+<br>
+<h3>My request for what I wanted others to critique:</h3>
+<h1>Hello there dear reviewer!</h1>
+<p>The state of the project that you have seen is simply a tic-tac-toe game and is missing
+    much of the core aspects of the game, like movement, building, mining, fueling, etc.
+</p>
+<h2>Even so:</h2>
+<p>The code from this simple game is what I'll likely be placing into the completed game
+    to check for a winner, so do your best to try and break my tic-tac-toe game! Some
+    possible suggestions would be:
+</p>
+<ul>
+    <li>What if no one wins?</li>
+    <li>What if I try and re-click a space?</li>
+    <li>Are diagonal victories supported?</li>
+</ul>
+<p>I do believe I've addressed these example questions, but a double-check can never hurt!</p>
+<h1>Thank you for your review!</h1>
+<p>Additionally, if you would like to, read the proposal page at: <a href="https://people.rit.edu/jsd3713/235/project3/proposal">This Link!</a>
+    and let me know what you think of the idea and what I might want to include when building it.
+    Otherwise, have a fantastic rest of your day!</p>
+<br>
+<h3>What happened after all this? The rest of the project of course!</h3>
+<p>First thing I added was the map and camera movement, but since there is no "camera" really, I just move the environment as a whole</p>
+<p>After that came the mech and selecting the mech! This was simple, however allowing for mech movement was more difficult, especially when
+ I had to start checking for objects in tiles you might be inclined to travel to and to stop the tokens from spawning</p>
+ <p>Then onto the second most difficult piece of the project, the HSMs! It took a while, but it was completed in full, and it served as the basis
+     for other things like the factory!
+ </p>
+ <p>Before I could get to the factory however, I had to make the thing you would put into the factory, the ore! Thus mining was created, with
+     each ore having 3 hits before destruction (although for some odd reason some have had a habit of sticking around for another 3)
+ </p>
+ <p>With the ore complete, it was factory time! It was a lot of duplication from the HSM code and then specification for the factory itself,
+     and detecting a nearby HSM was so difficult I ended up adding a "type" field to all of the objects on the board just so I could tell what
+     is what!
+ </p>
+ <p>With the factory done, the game was functionally complete, and all that was left to do was clean it all up and write it all down!
+     This project was both the most stressful and incredibly fun project of the semester, and I am glad to have been able to go along
+     this web dev journey with you and everyone else in this class! There are no more notes to submit, but in the spirit of all those
+     weeks of notes, I must say it. Here's to a great, wonderful, and awesome spring semester!
+ </p>

@@ -1,3 +1,4 @@
+// Is the core of the game and what the entire map is made up of
 class Tile extends PIXI.Sprite {
     constructor(texture, tileNumber) {
         super(texture);
@@ -21,6 +22,7 @@ class Tile extends PIXI.Sprite {
     }
 }
 
+// Is the players primary object and what they directly control
 class Mech extends PIXI.Sprite {
     constructor(texture, tileNumber, team) {
         super(texture);
@@ -71,6 +73,7 @@ class Mech extends PIXI.Sprite {
     }
 }
 
+// Spawns in to give the mech movement options
 class MovementToken extends PIXI.Sprite {
     constructor(texture, tileNumber, team) {
         super(texture);
@@ -109,6 +112,7 @@ class MovementToken extends PIXI.Sprite {
     }
 }
 
+// Allows the player to end their turn
 class EndTurn extends PIXI.Sprite {
     constructor(texture) {
         super(texture);
@@ -134,6 +138,7 @@ class EndTurn extends PIXI.Sprite {
     }
 }
 
+// The way to win, the HSM takes energy and uses it to display an energy-types color
 class HSM extends PIXI.Sprite {
     constructor(tileNumber) {
         super(assets.hsmNull);
@@ -246,6 +251,7 @@ class HSM extends PIXI.Sprite {
     }
 }
 
+// The background image for the HSMPower sprites so they don't crowd the main screen
 class HSMBack extends PIXI.Sprite {
     constructor() {
         super(assets.hsmBack);
@@ -268,6 +274,7 @@ class HSMBack extends PIXI.Sprite {
     }
 }
 
+// The power cells for the HSM that supply it with energy in their respective orders
 class HSMPower extends PIXI.Sprite {
     constructor(hsmBack, number) {
         super(assets.hsmPowerNull);
@@ -323,6 +330,7 @@ class HSMPower extends PIXI.Sprite {
     }
 }
 
+// This is how you build and fuel factories, mining ore is the best strategy towards winning the long game
 class Ore extends PIXI.Sprite {
     constructor(tileNumber) {
         super(assets.oreImage);
@@ -421,6 +429,7 @@ class Ore extends PIXI.Sprite {
     }
 }
 
+// Signals the game that the player wants to build
 class BuildButton extends PIXI.Sprite {
     constructor() {
         super(assets.buildButton);
@@ -440,6 +449,7 @@ class BuildButton extends PIXI.Sprite {
     }
 }
 
+// The wonderful markers representing where you can build
 class BuildMarker extends PIXI.Sprite {
     constructor(tileNumber, team) {
         super(assets.buildMarkerImg);
@@ -472,6 +482,7 @@ class BuildMarker extends PIXI.Sprite {
     }
 }
 
+// The factory supplies power to the HSM given fuel, and it has a great conversion rate of ore to fuel of 1 for 2!
 class Factory extends PIXI.Sprite {
     constructor(texture, tileNumber, team) {
         super(texture);
@@ -584,6 +595,7 @@ class Factory extends PIXI.Sprite {
     }
 }
 
+// The background image for the Factory Fill button and fuel status UI
 class FactoryBack extends PIXI.Sprite {
     constructor(factory) {
         super(assets.factoryBackImg);
@@ -600,6 +612,7 @@ class FactoryBack extends PIXI.Sprite {
     }
 }
 
+// If you have ore to spare, fuel up the factory with this button
 class FactoryFill extends PIXI.Sprite {
     constructor(factory) {
         super(assets.fillImg);
