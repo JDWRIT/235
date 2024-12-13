@@ -299,31 +299,35 @@ function displayMechData(mech){
 
         if (mech.energy > 0) {
             if (mech.tileNumber[0] - 1 >= 0) {
-                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "O");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+                if (board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content == null){
+                    let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "O");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
             if (mech.tileNumber[0] + 1 <= 14) {
-                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "O");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+                if (board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content == null) {
+                    let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "O");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
             if (mech.tileNumber[1] - 1 >= 0) {
-                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "O");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+                if (board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content == null) {
+                    let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "O");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
             if (mech.tileNumber[1] + 1 <= 14) {
-                let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "O");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+                if (board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content == null) {
+                    let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "O");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
         }
     }
-}
-
-function stopDisplayingMechData(mech){
-
 }
 
 function deselectAll(){
@@ -411,8 +415,9 @@ function BuildFactory(tileNumber) {
     else {
         let factory = new Factory(assets.factoryOImg ,[tileNumber[0], tileNumber[1]], "O");
         onBoard.push(factory);
+        factories.push(factory);
         stage.addChild(factory);
-        mechX.ore -= 5;
+        mechO.ore -= 5;
         deselectAll();
     }
     

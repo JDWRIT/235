@@ -57,7 +57,7 @@ class Mech extends PIXI.Sprite {
     }
 
     deselect() {
-        stopDisplayingMechData(this);
+        
     }
 
     moveMech(tileNumber){
