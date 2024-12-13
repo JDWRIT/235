@@ -385,7 +385,7 @@ function moveMech(team, tileNumber) {
 // Makes sure the mech info/stats text stays up-to-date
 function reloadMechText() {
     mechXUI.text = ("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration  + " | Ore: " + mechX.ore);
-    mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration  + " | Ore: " + mechX.ore);
+    mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration  + " | Ore: " + mechO.ore);
 }
 
 // Makes build markers for buildable (empty) tiles
