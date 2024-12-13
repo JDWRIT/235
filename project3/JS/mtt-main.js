@@ -21,6 +21,7 @@ let inputs = [false, false, false, false]
 let hsms = [[],[],[]];
 let mechX, mechO, endTurn;
 let mechXUI, mechOUI, turnUI, buildUI;
+let knocking, powerUp, mechMove, oreGrind;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
@@ -109,6 +110,12 @@ async function setup() {
     stage = app.stage;
     sceneWidth = app.renderer.width;
     sceneHeight = app.renderer.height;
+
+    // Load audio
+    knocking = new Howl({src: ["audio/knocking.mp3"],});
+    powerUp = new Howl({src: ["audio/powerUp.mp3"],});
+    mechMove = new Howl({src: ["audio/mechMove.mp3"],});
+    oreGrind = new Howl({src: ["audio/oreGrind.mp3"],});
 
     // Create board tiles
     for(let y = 0; y < 15; y++) {
@@ -420,6 +427,7 @@ function BuildFactory(tileNumber) {
         onBoard.push(factory);
         factories.push(factory);
         stage.addChild(factory);
+        knocking.play();
         mechX.ore -= 5;
         deselectAll();
     }
@@ -428,6 +436,7 @@ function BuildFactory(tileNumber) {
         onBoard.push(factory);
         factories.push(factory);
         stage.addChild(factory);
+        knocking.play();
         mechO.ore -= 5;
         deselectAll();
     }

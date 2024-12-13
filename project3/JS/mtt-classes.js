@@ -63,6 +63,7 @@ class Mech extends PIXI.Sprite {
     }
 
     moveMech(tileNumber){
+        mechMove.play();
         board[this.tileNumber[0]][this.tileNumber[1]].content = null;
         this.tileNumber = tileNumber;
         let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
@@ -300,6 +301,7 @@ class HSMPower extends PIXI.Sprite {
                     return;
                 }
             }
+            powerUp.play();
             mechX.energy -= 1;
             this.power = "X";
             this.texture = assets.hsmPowerX;
@@ -310,6 +312,7 @@ class HSMPower extends PIXI.Sprite {
                     return;
                 }
             }
+            powerUp.play();
             mechO.energy -= 1;
             this.power = "O";
             this.texture = assets.hsmPowerO;
@@ -362,6 +365,7 @@ class Ore extends PIXI.Sprite {
             if (turn == "X" && mechX.energy > 0) {
                 mechX.ore += 1;
                 mechX.energy -= 1;
+                oreGrind.play();
                 this.ore -= 1;
                 reloadMechText();
                 if (this.ore <= 0) {
@@ -379,6 +383,7 @@ class Ore extends PIXI.Sprite {
             else if (turn == "O" && mechO.energy > 0) {
                 mechX.ore += 1;
                 mechX.energy -= 1;
+                oreGrind.play();
                 this.ore -= 1;
                 reloadMechText();
                 if (this.ore <= 0) {
@@ -633,11 +638,13 @@ class FactoryFill extends PIXI.Sprite {
     select() {
         if (turn == "X" && mechX.ore > 0) {
             this.factory.fuel += 2;
+            oreGrind.play();
             mechX.ore -= 1;
             this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
         }
         else if (turn == "O" && mechO.ore > 0) {
             this.factory.fuel += 2;
+            oreGrind.play();
             mechX.ore -= 1;
             this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
         }

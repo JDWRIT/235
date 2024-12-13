@@ -1,0 +1,36 @@
+* {
+    background-color: rgb(218, 197, 131);
+    font-family: "Noto Sans", sans-serif;
+}
+
+body {
+    position: relative;
+    width: 80%;
+    left: 10%;
+    top: 45px;
+}
+
+ol {
+    list-style-type: upper-roman;
+    padding: 20px;
+}
+
+a:link {
+    color: rgb(255, 0, 0);
+}
+
+a:visited {
+    color: rgb(30, 0, 255);
+}
+
+a:focus {
+    color: rgb(79, 0, 99);
+}
+
+a:hover {
+    color: rgb(79, 0, 99);
+}
+
+a:active {
+    color: rgb(0, 221, 255);
+}
