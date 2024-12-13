@@ -341,6 +341,7 @@ class Ore extends PIXI.Sprite {
                 if (this.ore <= 0) {
                     this.visible = false;
                     board[this.tileNumber[0]][this.tileNumber[1]].content = null;
+                    displayMechData(mechX);
                 }
                 if (mechX.energy <= 0) {
                     for (let token in tokens) {
@@ -357,6 +358,7 @@ class Ore extends PIXI.Sprite {
                 if (this.ore <= 0) {
                     this.visible = false;
                     board[this.tileNumber[0]][this.tileNumber[1]].content = null;
+                    displayMechData(mechO);
                 }
                 if (mechO.energy <= 0) {
                     for (let token in tokens) {
@@ -372,14 +374,11 @@ class Ore extends PIXI.Sprite {
         if (turn == "X") {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if ((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1)) {
-                        console.log(":(");
-                    }
-                    else {
-                        if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
-                            return true;
-                        }
+                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
+                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
+                                return true;
+                            }
                     }
                 }
             }
@@ -398,6 +397,57 @@ class Ore extends PIXI.Sprite {
 
     deselect() {
         
+    }
+}
+
+class BuildButton extends PIXI.Sprite {
+    constructor() {
+        super(assets.buildButton);
+        this.anchor.set(0.5, 0.5);
+        this.width = 175;
+        this.height = 78.4;
+        this.x = sceneWidth - 100;
+        this.y = 100;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+    }
+
+    select() {
+        buildOptions();
+    }
+}
+
+class BuildMarker extends PIXI.Sprite {
+    constructor(tileNumber, team) {
+        super(assets.buildMarkerImg);
+        this.tileNumber = tileNumber;
+        this.anchor.set(0.5, 0.5);
+        this.width = 100;
+        this.height = 100;
+        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = tilePosition.x;
+        this.y = tilePosition.y;
+        this.speed = 50;
+        this.team = team;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+    }
+
+    move(dt = 1 / 60, direction = [0, 0]) {
+        this.x += direction[0] * this.speed * dt;
+        this.y += direction[1] * this.speed * dt;
+    }
+
+    select() {
+        BuildFactory(this.tileNumber);
+    }
+
+    deselect() {
+        stage.removeChild(this)
     }
 }
 
@@ -437,8 +487,11 @@ class Factory extends PIXI.Sprite {
         if (turn == "X") {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechX) {
-                        return true;
+                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
+                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
+                                return true;
+                            }
                     }
                 }
             }

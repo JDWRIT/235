@@ -15,10 +15,11 @@ let turn = "X";
 let board = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 let onBoard = [];
 let tokens = [];
+let buildMarkers = [];
 let inputs = [false, false, false, false]
 let hsms = [[],[],[]];
 let mechX, mechO, endTurn;
-let mechXUI, mechOUI, turnUI;
+let mechXUI, mechOUI, turnUI, buildUI;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
@@ -78,7 +79,9 @@ async function loadImages() {
     xWins: "images/TicTacToeBoardBasicXWins.png",
     oreImage: "images/Ore.png",
     factoryXImg: "images/FactoryX.png",
-    factoryOImg: "images/FactoryO.png"
+    factoryOImg: "images/FactoryO.png",
+    buildButton: "images/BuildButton.png",
+    buildMarkerImg: "images/BuildMarker.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -115,32 +118,29 @@ async function setup() {
   onBoard.push(mechO);
   stage.addChild(mechO);
 
-  
-
-  // Make HSMs
-  for (let y = 0; y < 3; y++) {
-    for (let x = 0; x < 3; x++) {
-        makeHSM([(x * 5) + 2,(y * 5) + 2], x, y);
-    }
-  }
-
-  // Make ore
-  for (let i = 0; i < 50; i++) {
-    let oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
-    let notFound = true;
-    while (notFound) {
-        if (board[oreTile[1]][oreTile[0]].content == null) {
-            notFound = false;
+    // Make ore
+    for (let i = 0; i < 50; i++) {
+        let oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
+        let notFound = true;
+        while (notFound) {
+            if (board[oreTile[1]][oreTile[0]].content == null) {
+                notFound = false;
+            }
+            else {
+                oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
+            }
         }
-        else {
-            oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
+        let ore = new Ore([oreTile[0], oreTile[1]]);
+        onBoard.push(ore);
+        stage.addChild(ore);
+    }
+
+    // Make HSMs
+    for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 3; x++) {
+            makeHSM([(x * 5) + 2,(y * 5) + 2], x, y);
         }
     }
-    let ore = new Ore([oreTile[0], oreTile[1]]);
-    onBoard.push(ore);
-    stage.addChild(ore);
-  }
-
     // Make UI
     mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration + " | Ore: " + mechX.ore, {
         fill: 0xffffff,
@@ -170,6 +170,9 @@ async function setup() {
     });
     turnUI.x = sceneWidth - 150;
     stage.addChild(turnUI);
+
+    buildUI = new BuildButton;
+    stage.addChild(buildUI);
 
     endTurn = new EndTurn(assets.endTurn);
     endTurn.x = sceneWidth - endTurn.width;
@@ -216,6 +219,11 @@ function moveBoardElements(dt, direction){
     if (tokens.length > 0) {
         for (let token in tokens) {
             tokens[token].move(dt, direction);
+        }
+    }
+    if (buildMarkers.length > 0) {
+        for (let marker in buildMarkers) {
+            buildMarkers[marker].move(dt, direction);
         }
     }
 }
@@ -298,6 +306,12 @@ function deselectAll(){
         }
         tokens = [];
     }
+    if (buildMarkers.length > 0) {
+        for (let marker in buildMarkers) {
+            buildMarkers[marker].deselect();
+        }
+        tokens = [];
+    }
     mechXUI.visible = false;
     mechOUI.visible = false;
 }
@@ -322,6 +336,55 @@ function moveMech(team, tileNumber) {
 function reloadMechText() {
     mechXUI.text = ("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration  + " | Ore: " + mechX.ore);
     mechOUI.text = ("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration  + " | Ore: " + mechX.ore);
+}
+
+function buildOptions() {
+    if (turn == "X" && mechX.energy > 0 && mechX.ore >= 5) {
+        for (let y = -1; y < 2; y++) {
+            for (let x = -1; x < 2; x++) {
+                if (!((y + mechX.tileNumber[1] < 0 && y == -1)|| (y + mechX.tileNumber[1] > 14 && y == 1) || 
+                    (x + mechX.tileNumber[0] < 0 && x == -1) || (x + mechX.tileNumber[0] > 14 && x == 1))) {
+                        if (board[x + mechX.tileNumber[0]][y + mechX.tileNumber[1]].content == null) {
+                            let buildMarker = new BuildMarker([x + mechX.tileNumber[0], y + mechX.tileNumber[1]], turn);
+                            buildMarkers.push(buildMarker);
+                            stage.addChild(buildMarker);
+                        }
+                }
+            }
+        }
+    }
+    else if (turn == "O" && mechO.energy > 0 && mechO.ore >= 5) {
+        for (let y = -1; y < 2; y++) {
+            for (let x = -1; x < 2; x++) {
+                if (!((y + mechO.tileNumber[1] < 0 && y == -1)|| (y + mechO.tileNumber[1] > 14 && y == 1) || 
+                    (x + mechO.tileNumber[0] < 0 && x == -1) || (x + mechO.tileNumber[0] > 14 && x == 1))) {
+                        if (board[x + mechO.tileNumber[0]][y + mechO.tileNumber[1]].content == null) {
+                            let buildMarker = new BuildMarker([x + mechO.tileNumber[0], y + mechO.tileNumber[1]], turn);
+                            buildMarkers.push(buildMarker);
+                            stage.addChild(buildMarker);
+                        }
+                }
+            }
+        }
+    }
+}
+
+function BuildFactory(tileNumber) {
+    if (turn == "X") {
+        let factory = new Factory(assets.factoryXImg ,[tileNumber[0], tileNumber[1]]);
+        onBoard.push(factory);
+        stage.addChild(factory);
+        mechX.ore -= 5;
+        deselectAll();
+    }
+    else {
+        let factory = new Factory(assets.factoryOImg ,[tileNumber[0], tileNumber[1]]);
+        onBoard.push(factory);
+        stage.addChild(factory);
+        mechX.ore -= 5;
+        deselectAll();
+    }
+    
 }
 
 function rejuvinate(mech) {
