@@ -76,7 +76,9 @@ async function loadImages() {
     hsmPowerO: "images/HSMPowerO.png",
     oWins: "images/TicTacToeBoardBasicOWins.png",
     xWins: "images/TicTacToeBoardBasicXWins.png",
-    oreImage: "images/Ore.png"
+    oreImage: "images/Ore.png",
+    factoryXImg: "images/FactoryX.png",
+    factoryOImg: "images/FactoryO.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -113,40 +115,7 @@ async function setup() {
   onBoard.push(mechO);
   stage.addChild(mechO);
 
-  // Make UI
-  mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration + " | Ore: " + mechX.ore, {
-    fill: 0xffffff,
-    fontSize: 35,
-    fontFamily: "Arial",
-    stroke: 0xff0000,
-    strokeThickness: 6,
-  });
-  mechXUI.visible = false;
-  stage.addChild(mechXUI);
-  mechOUI = new PIXI.Text("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration + " | Ore: " + mechO.ore, {
-    fill: 0xffffff,
-    fontSize: 35,
-    fontFamily: "Arial",
-    stroke: 0xff0000,
-    strokeThickness: 6,
-  });
-  mechOUI.visible = false;
-  stage.addChild(mechOUI);
-
-  turnUI = new PIXI.Text("Turn: X", {
-    fill: 0xffffff,
-    fontSize: 35,
-    fontFamily: "Arial",
-    stroke: 0xff0000,
-    strokeThickness: 6,
-  });
-  turnUI.x = sceneWidth - 150;
-  stage.addChild(turnUI);
-
-  endTurn = new EndTurn(assets.endTurn);
-  endTurn.x = sceneWidth - endTurn.width;
-  endTurn.y = sceneHeight - endTurn.height + 50;
-  stage.addChild(endTurn);
+  
 
   // Make HSMs
   for (let y = 0; y < 3; y++) {
@@ -156,8 +125,56 @@ async function setup() {
   }
 
   // Make ore
-  let ore = new Ore([1, 1]);
-  stage.addChild(ore);
+  for (let i = 0; i < 50; i++) {
+    let oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
+    let notFound = true;
+    while (notFound) {
+        if (board[oreTile[1]][oreTile[0]].content == null) {
+            notFound = false;
+        }
+        else {
+            oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
+        }
+    }
+    let ore = new Ore([oreTile[0], oreTile[1]]);
+    onBoard.push(ore);
+    stage.addChild(ore);
+  }
+
+    // Make UI
+    mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration + " | Ore: " + mechX.ore, {
+        fill: 0xffffff,
+        fontSize: 35,
+        fontFamily: "Arial",
+        stroke: 0xff0000,
+        strokeThickness: 6,
+    });
+    mechXUI.visible = false;
+    stage.addChild(mechXUI);
+    mechOUI = new PIXI.Text("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration + " | Ore: " + mechO.ore, {
+        fill: 0xffffff,
+        fontSize: 35,
+        fontFamily: "Arial",
+        stroke: 0xff0000,
+        strokeThickness: 6,
+    });
+    mechOUI.visible = false;
+    stage.addChild(mechOUI);
+
+    turnUI = new PIXI.Text("Turn: X", {
+        fill: 0xffffff,
+        fontSize: 35,
+        fontFamily: "Arial",
+        stroke: 0xff0000,
+        strokeThickness: 6,
+    });
+    turnUI.x = sceneWidth - 150;
+    stage.addChild(turnUI);
+
+    endTurn = new EndTurn(assets.endTurn);
+    endTurn.x = sceneWidth - endTurn.width;
+    endTurn.y = sceneHeight - endTurn.height;
+    stage.addChild(endTurn);
 
   app.ticker.add(gameLoop);
 }

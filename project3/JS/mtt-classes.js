@@ -66,6 +66,8 @@ class Mech extends PIXI.Sprite {
         this.x = tilePosition.x;
         this.y = tilePosition.y;
         tilePosition.content = this;
+        console.log("tile num " + tilePosition.tileNumber);
+        console.log("tile pos y " + tilePosition.y);
         this.energy--;
     }
 }
@@ -112,7 +114,7 @@ class EndTurn extends PIXI.Sprite {
     constructor(texture) {
         super(texture);
         this.width = 150;
-        this.height = 150;
+        this.height = 41.4;
         this.interactive = true;
         this.buttonMode = true;
         this.on("click", this.select); // clicked
@@ -363,6 +365,71 @@ class Ore extends PIXI.Sprite {
                     tokens = [];
                 }
             }
+        }
+    }
+
+    proximityCheck() {
+        if (turn == "X") {
+            for (let y = -1; y < 2; y++) {
+                for (let x = -1; x < 2; x++) {
+                    if ((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1)) {
+                        console.log(":(");
+                    }
+                    else {
+                        if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for (let y = -1; y < 2; y++) {
+                for (let x = -1; x < 2; x++) {
+                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    deselect() {
+        
+    }
+}
+
+class Factory extends PIXI.Sprite {
+    constructor(texture, tileNumber) {
+        super(texture);
+        this.tileNumber = tileNumber;
+        this.anchor.set(0.5, 0.5);
+        this.width = 175;
+        this.height = 175;
+        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = tilePosition.x;
+        this.y = tilePosition.y;
+        this.speed = 50;
+        this.hsm = null;
+        this.fuel = 0;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+        board[this.tileNumber[0]][this.tileNumber[1]].content = this;
+    }
+
+    move(dt = 1 / 60, direction = [0, 0]) {
+        this.x += direction[0] * this.speed * dt;
+        this.y += direction[1] * this.speed * dt;
+    }
+
+    select() {
+        let check = this.proximityCheck();
+        if (check) {
+            
         }
     }
 
