@@ -38,6 +38,7 @@ class Mech extends PIXI.Sprite {
         this.ore = 0;
         this.interactive = true;
         this.buttonMode = true;
+        this.type = "Mech";
         this.on("click", this.select); // clicked
         this.on("tap", this.select); // clicked mobile
         board[this.tileNumber[0]][this.tileNumber[1]].content = this;
@@ -147,6 +148,7 @@ class HSM extends PIXI.Sprite {
         this.y = tilePosition.y;
         this.speed = 50;
         this.team = "null";
+        this.type = "HSM";
         this.interactive = true;
         this.buttonMode = true;
         this.on("click", this.select); // clicked
@@ -318,6 +320,7 @@ class Ore extends PIXI.Sprite {
         this.y = tilePosition.y;
         this.speed = 50;
         this.ore = 3;
+        this.type = "Ore";
         this.interactive = true;
         this.buttonMode = true;
         this.on("click", this.select); // clicked
@@ -464,11 +467,13 @@ class Factory extends PIXI.Sprite {
         this.speed = 50;
         this.hsm = null;
         this.fuel = 0;
+        this.type = "Factory";
         this.interactive = true;
         this.buttonMode = true;
         this.on("click", this.select); // clicked
         this.on("tap", this.select); // clicked mobile
         board[this.tileNumber[0]][this.tileNumber[1]].content = this;
+        this.findHSM();
     }
 
     move(dt = 1 / 60, direction = [0, 0]) {
@@ -476,36 +481,23 @@ class Factory extends PIXI.Sprite {
         this.y += direction[1] * this.speed * dt;
     }
 
-    select() {
-        let check = this.proximityCheck();
-        if (check) {
-            
+    findHSM() {
+        for (let y = -1; y < 2; y++) {
+            for (let x = -1; x < 2; x++) {
+                if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
+                    (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
+                        if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content != null) {
+                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content.type == "HSM") {
+                                this.hsm = board[x + this.tileNumber[0]][y + this.tileNumber[1]].content;
+                            }
+                        }
+                }
+            }
         }
     }
 
-    proximityCheck() {
-        if (turn == "X") {
-            for (let y = -1; y < 2; y++) {
-                for (let x = -1; x < 2; x++) {
-                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
-                                return true;
-                            }
-                    }
-                }
-            }
-        }
-        else {
-            for (let y = -1; y < 2; y++) {
-                for (let x = -1; x < 2; x++) {
-                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    select() {
+        
     }
 
     deselect() {
