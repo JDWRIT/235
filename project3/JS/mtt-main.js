@@ -16,8 +16,9 @@ let board = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 let onBoard = [];
 let tokens = [];
 let inputs = [false, false, false, false]
+let hsms = [[],[],[]];
 let mechX, mechO, endTurn;
-let mechXUI, mechOUI;
+let mechXUI, mechOUI, turnUI;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
@@ -65,7 +66,16 @@ async function loadImages() {
     mttXMech: "images/MTTX.png",
     mttOMarker: "images/MTTTravelMarkO.png",
     mttXMarker: "images/MTTTravelMarkX.png",
-    endTurn: "images/EndTurn.png"
+    endTurn: "images/EndTurn.png",
+    hsmNull: "images/HSMNull.png",
+    hsmX: "images/HSMX.png",
+    hsmO: "images/HSMO.png",
+    hsmBack: "images/HSMBackground.png",
+    hsmPowerNull: "images/HSMPowerNull.png",
+    hsmPowerX: "images/HSMPowerX.png",
+    hsmPowerO: "images/HSMPowerO.png",
+    oWins: "images/TicTacToeBoardBasicOWins.png",
+    xWins: "images/TicTacToeBoardBasicXWins.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -122,12 +132,36 @@ async function setup() {
   mechOUI.visible = false;
   stage.addChild(mechOUI);
 
+  turnUI = new PIXI.Text("Turn: X", {
+    fill: 0xffffff,
+    fontSize: 40,
+    fontFamily: "Arial",
+    stroke: 0xff0000,
+    strokeThickness: 6,
+  });
+  turnUI.x = sceneWidth - 150;
+  stage.addChild(turnUI);
+
   endTurn = new EndTurn(assets.endTurn);
   endTurn.x = sceneWidth - endTurn.width;
   endTurn.y = sceneHeight - endTurn.height + 50;
   stage.addChild(endTurn);
 
+  // Make HSMs
+  for (let y = 0; y < 3; y++) {
+    for (let x = 0; x < 3; x++) {
+        makeHSM([(x * 5) + 2,(y * 5) + 2], x, y);
+    }
+  }
+
   app.ticker.add(gameLoop);
+}
+
+function makeHSM(position, x, y) {
+    let hsm = new HSM([position[0], position[1]]);
+    hsms[y][x] = hsm;
+    onBoard.push(hsm);
+    stage.addChild(hsm);
 }
 
 function gameLoop(){
@@ -171,24 +205,32 @@ function displayMechData(mech){
 
         if (mech.energy > 0) {
             if (mech.tileNumber[0] - 1 >= 0) {
-                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "X");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+                if (board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content == null){
+                    let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "X");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
-            if (mech.tileNumber[0] + 1 <= 15) {
-                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "X");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+            if (mech.tileNumber[0] + 1 <= 14) {
+                if (board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content == null) {
+                    let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "X");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
             if (mech.tileNumber[1] - 1 >= 0) {
-                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "X");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+                if (board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content == null) {
+                    let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "X");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
-            if (mech.tileNumber[1] + 1 <= 15) {
-                let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "X");
-                tokens.push(moveToken);
-                stage.addChild(moveToken);
+            if (mech.tileNumber[1] + 1 <= 14) {
+                if (board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content == null) {
+                    let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "X");
+                    tokens.push(moveToken);
+                    stage.addChild(moveToken);
+                }
             }
         }
     }
@@ -265,4 +307,48 @@ function rejuvinate(mech) {
     if (mech.energy > mech.energyCapacity) {
         mech.energy = mech.energyCapacity;
     }
+    for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 3; x++) {
+            hsms[y][x].useEnergy();
+        }
+    }
+    turnUI.text = "Turn: " + turn;
+    checkForWinner();
 }
+
+function checkForWinner() {
+    for (let x = 0; x < 3; x++) {
+      if (hsms[x][0].team != "null" && hsms[x][0].team == hsms[x][1].team && hsms[x][1].team == hsms[x][2].team) {
+        pronounceWinner(hsms[x][0].team);
+        return;
+      }
+    }
+    for (let y = 0; y < 3; y++) {
+      if (hsms[0][y].team != "null" && hsms[0][y].team == hsms[1][y].team && hsms[1][y].team == hsms[2][y].team) {
+        pronounceWinner(hsms[0][y].team);
+        return;
+      }
+    }
+    if (hsms[0][0].team != "null" && hsms[0][0].team == hsms[1][1].team && hsms[1][1].team == hsms[2][2].team) {
+      pronounceWinner(hsms[0][0].team);
+      return;
+    }
+    else if (hsms[0][2].team != "null" && hsms[0][2].team == hsms[1][1].team && hsms[1][1].team == hsms[2][0].team) {
+      pronounceWinner(hsms[2][0].team);
+      return;
+    }
+  }
+
+  function pronounceWinner(winner) {
+    let winDisplay;
+    if (winner == "X") {
+        winDisplay = new PIXI.Sprite(assets.xWins);
+    } else {
+        winDisplay = new PIXI.Sprite(assets.oWins);
+    }
+    winDisplay.width = 950;
+    winDisplay.height = 950;
+    winDisplay.interactive = true;
+    winDisplay.buttonMode = true;
+    stage.addChild(winDisplay);
+  }
