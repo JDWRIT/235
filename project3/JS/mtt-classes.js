@@ -419,7 +419,7 @@ class Ore extends PIXI.Sprite {
                 for (let x = -1; x < 2; x++) {
                     if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
                         (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                        if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                        if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechO) {
                             return true;
                         }
                     }
