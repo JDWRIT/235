@@ -35,7 +35,7 @@ class Mech extends PIXI.Sprite {
         this.energyCapacity = 4;
         this.energy = 3;
         this.energyRegeneration = 3;
-        this.ore = 0;
+        this.ore = 100;
         this.interactive = true;
         this.buttonMode = true;
         this.type = "Mech";
@@ -473,7 +473,20 @@ class Factory extends PIXI.Sprite {
         this.on("click", this.select); // clicked
         this.on("tap", this.select); // clicked mobile
         board[this.tileNumber[0]][this.tileNumber[1]].content = this;
+        this.factoryBack = new FactoryBack(this);
+        this.fillButton = new FactoryFill(this);
         this.findHSM();
+        this.infoText= new PIXI.Text("Fuel: 0", {
+            fill: 0xffffff,
+            fontSize: 35,
+            fontFamily: "Arial",
+            stroke: 0xff0000,
+            strokeThickness: 6,
+        });
+        this.infoText.x = 500;
+        this.infoText.y = 550;
+        this.infoText.visible = false;
+        stage.addChild(this.infoText);
     }
 
     move(dt = 1 / 60, direction = [0, 0]) {
@@ -497,10 +510,66 @@ class Factory extends PIXI.Sprite {
     }
 
     select() {
-        
+        this.visible = false;
+        this.factoryBack.visible = true;
+        this.fillButton.visible = true;
+        this.infoText.visible = true;
+        this.infoText.text = "Fuel: " + this.fuel;
     }
 
     deselect() {
-        
+        this.visible = true;
+        this.factoryBack.visible = false;
+        this.fillButton.visible = false;
+        this.infoText.visible = false;
+    }
+}
+
+class FactoryBack extends PIXI.Sprite {
+    constructor(factory) {
+        super(assets.factoryBackImg);
+        this.anchor.set(0.5, 0.5);
+        this.width = 600;
+        this.height = 600;
+        this.x = 500;
+        this.y = 500;
+        this.myFactory = factory;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.visible = false;
+        stage.addChild(this);
+    }
+}
+
+class FactoryFill extends PIXI.Sprite {
+    constructor(factory) {
+        super(assets.fillImg);
+        this.anchor.set(0.5, 0.5);
+        this.width = 175;
+        this.height = 78.4;
+        this.x = 600;
+        this.y = 400;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.select); // clicked
+        this.on("tap", this.select); // clicked mobile
+        this.visible = false;
+        this.factory = factory;
+        stage.addChild(this);
+    }
+
+    select() {
+        if (turn == "X" && mechX.ore > 0) {
+            this.factory.fuel += 2;
+            mechX.ore -= 1;
+            this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
+            console.log(this.factory.infoText);
+        }
+        else if (turn == "O" && mechO.ore > 0) {
+            this.factory.fuel += 2;
+            mechX.ore -= 1;
+            this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
+            console.log(this.factory.infoText);
+        }
     }
 }

@@ -81,7 +81,9 @@ async function loadImages() {
     factoryXImg: "images/FactoryX.png",
     factoryOImg: "images/FactoryO.png",
     buildButton: "images/BuildButton.png",
-    buildMarkerImg: "images/BuildMarker.png"
+    buildMarkerImg: "images/BuildMarker.png",
+    factoryBackImg: "images/FactoryBkg.png",
+    fillImg: "images/FactoryFillButton.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
