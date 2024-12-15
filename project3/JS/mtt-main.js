@@ -23,6 +23,7 @@ let mechX, mechO, endTurn;
 let mechXUI, mechOUI, turnUI, buildUI;
 let knocking, powerUp, mechMove, oreGrind;
 let mainGame, userInterface;
+let backDeselector;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
@@ -92,7 +93,8 @@ async function loadImages() {
     buildButton: "images/BuildButton.png",
     buildMarkerImg: "images/BuildMarker.png",
     factoryBackImg: "images/FactoryBkg.png",
-    fillImg: "images/FactoryFillButton.png"
+    fillImg: "images/FactoryFillButton.png",
+    backgroundDeselector: "images/BackgroundDeselector.png"
   });
 
   // The second argument is a callback function that is called whenever the loader makes progress.
@@ -112,10 +114,14 @@ async function setup() {
     sceneWidth = app.renderer.width;
     sceneHeight = app.renderer.height;
 
+    backDeselector = new BackSelector();
+    stage.addChild(backDeselector);
+
     mainGame = new PIXI.Container();
     stage.addChild(mainGame);
     userInterface = new PIXI.Container();
     stage.addChild(userInterface);
+
 
     // Load audio
     knocking = new Howl({src: ["audio/knocking.mp3"],});

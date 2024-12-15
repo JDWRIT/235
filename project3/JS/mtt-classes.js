@@ -35,9 +35,9 @@ class Mech extends PIXI.Sprite {
         this.speed = 50;
         this.team = team;
         this.energyCapacity = 4;
-        this.energy = 4000000;
+        this.energy = 4;
         this.energyRegeneration = 3;
-        this.ore = 100000;
+        this.ore = 0;
         this.interactive = true;
         this.buttonMode = true;
         this.type = "Mech";
@@ -642,8 +642,24 @@ class FactoryFill extends PIXI.Sprite {
         else if (turn == "O" && mechO.ore > 0) {
             this.factory.fuel += 2;
             oreGrind.play();
-            mechX.ore -= 1;
+            mechO.ore -= 1;
             this.factory.infoText.text = "Fuel: " +  this.factory.fuel;
         }
+    }
+}
+
+class BackSelector extends PIXI.Sprite {
+    constructor() {
+        super(assets.backgroundDeselector);
+        this.width = 10000;
+        this.height = 10000;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.on("click", this.clicked); // clickeawd
+        this.on("tap", this.clicked); // clicked mobile
+    }
+
+    clicked() {
+        deselectAll();
     }
 }
