@@ -101,6 +101,7 @@ class MovementToken extends PIXI.Sprite {
 
     select() {
         moveMech(this.team, [this.tileNumber[0], this.tileNumber[1]]);
+        reloadMechText();
         if (this.team == "X" && mechX.energy > 0) {
             displayMechData(mechX);
         }
