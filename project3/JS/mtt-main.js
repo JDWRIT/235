@@ -120,9 +120,9 @@ async function setup() {
     // Create board tiles
     for(let y = 0; y < 15; y++) {
         for (let x = 0; x < 15; x++) {
-        let boardTile = new Tile(boardTileColor(), [x, y]);
-        board[x][y] = boardTile;
-        stage.addChild(boardTile);
+            let boardTile = new Tile(boardTileColor(), [y, x]);
+            board[y][x] = boardTile;
+            stage.addChild(boardTile);
         }
     }
 
@@ -134,12 +134,19 @@ async function setup() {
     onBoard.push(mechO);
     stage.addChild(mechO);
 
+    // Make HSMs
+    for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 3; x++) {
+            makeHSM([(y * 5) + 2, (x * 5) + 2], y, x);
+        }
+    }
+
     // Make ore
     for (let i = 0; i < 50; i++) {
         let oreTile = [Math.floor(Math.random() * 15), Math.floor(Math.random() * 15)];
         let notFound = true;
         while (notFound) {
-            if (board[oreTile[1]][oreTile[0]].content == null) {
+            if (board[oreTile[0]][oreTile[1]].content == null) {
                 notFound = false;
             }
             else {
@@ -151,12 +158,6 @@ async function setup() {
         stage.addChild(ore);
     }
 
-    // Make HSMs
-    for (let y = 0; y < 3; y++) {
-        for (let x = 0; x < 3; x++) {
-            makeHSM([(x * 5) + 2,(y * 5) + 2], x, y);
-        }
-    }
     // Make UI
     mechXUI = new PIXI.Text("Energy: " + mechX.energy + "/" + mechX.energyCapacity + " | Energy Regeneration: " + mechX.energyRegeneration + " | Ore: " + mechX.ore, {
         fill: 0xffffff,
@@ -199,7 +200,7 @@ async function setup() {
 }
 
 // Makes HSMs given a position, as well as an X, Y coordinate for the 3x3 HSM board
-function makeHSM(position, x, y) {
+function makeHSM(position, y, x) {
     let hsm = new HSM([position[0], position[1]]);
     hsms[y][x] = hsm;
     onBoard.push(hsm);
@@ -253,7 +254,7 @@ function gameLoop(){
 function moveBoardElements(dt, direction){
     for(let y = 0; y < 15; y++) {
         for (let x = 0; x < 15; x++) {
-            board[x][y].move(dt, direction);
+            board[y][x].move(dt, direction);
         }
     }
     for (let thing in onBoard) {
@@ -277,34 +278,53 @@ function displayMechData(mech){
         mechXUI.visible = true;
 
         if (mech.energy > 0) {
+            console.log("mech.tileNumber[0]: " + mech.tileNumber[0]);
+            console.log("mech.tileNumber[1]: " + mech.tileNumber[1]);
             if (mech.tileNumber[0] - 1 >= 0) {
+                console.log("1 content pre: " + board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content);
                 if (board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content == null){
                     let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "X");
+                    console.log("1");
+                    console.log("1 content post: " + board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content);
+                    console.log("1 board[" + (mech.tileNumber[0] - 1) + "][" + (mech.tileNumber[1]) + "]");
                     tokens.push(moveToken);
                     stage.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[0] + 1 <= 14) {
+                console.log("2 content pre: " + board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content);
                 if (board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content == null) {
                     let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "X");
+                    console.log("2");
+                    console.log("2 content post: " + board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content);
+                    console.log("2 board[" + (mech.tileNumber[0] + 1) + "][" + (mech.tileNumber[1]) + "]");
                     tokens.push(moveToken);
                     stage.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[1] - 1 >= 0) {
+                console.log("3 content pre: " + board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content);
                 if (board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content == null) {
                     let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "X");
+                    console.log("3");
+                    console.log("3 content post: " + board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content);
+                    console.log("3 board[" + (mech.tileNumber[0]) + "][" + (mech.tileNumber[1] - 1) + "]");
                     tokens.push(moveToken);
                     stage.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[1] + 1 <= 14) {
+                console.log("4 content pre: " + board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content);
                 if (board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content == null) {
                     let moveToken = new MovementToken(assets.mttXMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "X");
+                    console.log("4");
+                    console.log("4 content post: " + board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content);
+                    console.log("4 board[" + (mech.tileNumber[0]) + "][" + (mech.tileNumber[1] + 1) + "]");
                     tokens.push(moveToken);
                     stage.addChild(moveToken);
                 }
             }
+            console.log("-----------------------")
         }
     }
     else {
@@ -393,10 +413,10 @@ function buildOptions() {
     if (turn == "X" && mechX.energy > 0 && mechX.ore >= 5) {
         for (let y = -1; y < 2; y++) {
             for (let x = -1; x < 2; x++) {
-                if (!((y + mechX.tileNumber[1] < 0 && y == -1)|| (y + mechX.tileNumber[1] > 14 && y == 1) || 
-                    (x + mechX.tileNumber[0] < 0 && x == -1) || (x + mechX.tileNumber[0] > 14 && x == 1))) {
-                        if (board[x + mechX.tileNumber[0]][y + mechX.tileNumber[1]].content == null) {
-                            let buildMarker = new BuildMarker([x + mechX.tileNumber[0], y + mechX.tileNumber[1]], turn);
+                if (!((y + mechX.tileNumber[0] < 0 && y == -1)|| (y + mechX.tileNumber[0] > 14 && y == 1) || 
+                    (x + mechX.tileNumber[1] < 0 && x == -1) || (x + mechX.tileNumber[1] > 14 && x == 1))) {
+                        if (board[y + mechX.tileNumber[0]][x + mechX.tileNumber[1]].content == null) {
+                            let buildMarker = new BuildMarker([y + mechX.tileNumber[0], x + mechX.tileNumber[1]], turn);
                             buildMarkers.push(buildMarker);
                             stage.addChild(buildMarker);
                         }
@@ -407,10 +427,10 @@ function buildOptions() {
     else if (turn == "O" && mechO.energy > 0 && mechO.ore >= 5) {
         for (let y = -1; y < 2; y++) {
             for (let x = -1; x < 2; x++) {
-                if (!((y + mechO.tileNumber[1] < 0 && y == -1)|| (y + mechO.tileNumber[1] > 14 && y == 1) || 
-                    (x + mechO.tileNumber[0] < 0 && x == -1) || (x + mechO.tileNumber[0] > 14 && x == 1))) {
-                        if (board[x + mechO.tileNumber[0]][y + mechO.tileNumber[1]].content == null) {
-                            let buildMarker = new BuildMarker([x + mechO.tileNumber[0], y + mechO.tileNumber[1]], turn);
+                if (!((y + mechO.tileNumber[0] < 0 && y == -1)|| (y + mechO.tileNumber[0] > 14 && y == 1) || 
+                    (x + mechO.tileNumber[1] < 0 && x == -1) || (x + mechO.tileNumber[1] > 14 && x == 1))) {
+                        if (board[y + mechO.tileNumber[0]][x + mechO.tileNumber[1]].content == null) {
+                            let buildMarker = new BuildMarker([y + mechO.tileNumber[0], x + mechO.tileNumber[1]], turn);
                             buildMarkers.push(buildMarker);
                             stage.addChild(buildMarker);
                         }

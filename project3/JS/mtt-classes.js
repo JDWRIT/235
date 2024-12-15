@@ -6,8 +6,8 @@ class Tile extends PIXI.Sprite {
         this.anchor.set(0.5, 0.5);
         this.width = 175;
         this.height = 175;
-        this.x = (this.tileNumber[0] * this.width) + (this.width / 2);
-        this.y = (this.tileNumber[1] * this.height) + (this.height / 2);
+        this.x = (this.tileNumber[1] * this.width) + (this.width / 2);
+        this.y = (this.tileNumber[0] * this.height) + (this.height / 2);
         this.speed = 50;
         this.interactive = true;
         this.buttonMode = true;
@@ -30,14 +30,14 @@ class Mech extends PIXI.Sprite {
         this.anchor.set(0.5, 0.5);
         this.width = 150;
         this.height = 150;
-        this.x = (this.tileNumber[0] * 175) + (this.width / 2);
-        this.y = (this.tileNumber[1] * 175) + (this.height / 2);
+        this.x = (this.tileNumber[1] * 175) + (this.width / 2);
+        this.y = (this.tileNumber[0] * 175) + (this.height / 2);
         this.speed = 50;
         this.team = team;
         this.energyCapacity = 4;
-        this.energy = 4;
+        this.energy = 4000000;
         this.energyRegeneration = 3;
-        this.ore = 0;
+        this.ore = 100000;
         this.interactive = true;
         this.buttonMode = true;
         this.type = "Mech";
@@ -66,10 +66,11 @@ class Mech extends PIXI.Sprite {
         mechMove.play();
         board[this.tileNumber[0]][this.tileNumber[1]].content = null;
         this.tileNumber = tileNumber;
-        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
-        this.x = tilePosition.x;
-        this.y = tilePosition.y;
-        tilePosition.content = this;
+        console.log("Mech board[" + (this.tileNumber[0]) + "][" + (this.tileNumber[1]) + "]");
+        this.tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = this.tilePosition.x;
+        this.y = this.tilePosition.y;
+        board[this.tileNumber[0]][this.tileNumber[1]].content = this;
         this.energy--;
     }
 }
@@ -82,9 +83,9 @@ class MovementToken extends PIXI.Sprite {
         this.anchor.set(0.5, 0.5);
         this.width = 100;
         this.height = 100;
-        let tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
-        this.x = tilePosition.x;
-        this.y = tilePosition.y;
+        this.tilePosition = board[this.tileNumber[0]][this.tileNumber[1]];
+        this.x = this.tilePosition.x;
+        this.y = this.tilePosition.y;
         this.speed = 50;
         this.team = team;
         this.interactive = true;
@@ -99,7 +100,7 @@ class MovementToken extends PIXI.Sprite {
     }
 
     select() {
-        moveMech(this.team, this.tileNumber);
+        moveMech(this.team, [this.tileNumber[0], this.tileNumber[1]]);
         if (this.team == "X" && mechX.energy > 0) {
             displayMechData(mechX);
         }
@@ -199,7 +200,7 @@ class HSM extends PIXI.Sprite {
         if (turn == "X") {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechX) {
+                    if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content == mechX) {
                         return true;
                     }
                 }
@@ -208,7 +209,7 @@ class HSM extends PIXI.Sprite {
         else {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                    if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content == mechO) {
                         return true;
                     }
                 }
@@ -405,9 +406,9 @@ class Ore extends PIXI.Sprite {
         if (turn == "X") {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
+                    if (!((y + this.tileNumber[0] < 0 && y == -1)|| (y + this.tileNumber[0] > 14 && y == 1) || 
+                        (x + this.tileNumber[1] < 0 && x == -1) || (x + this.tileNumber[1] > 14 && x == 1))) {
+                            if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content == mechX) {
                                 return true;
                             }
                     }
@@ -417,9 +418,9 @@ class Ore extends PIXI.Sprite {
         else {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                        if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechO) {
+                    if (!((y + this.tileNumber[0] < 0 && y == -1)|| (y + this.tileNumber[0] > 14 && y == 1) || 
+                        (x + this.tileNumber[1] < 0 && x == -1) || (x + this.tileNumber[1] > 14 && x == 1))) {
+                        if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content == mechO) {
                             return true;
                         }
                     }
@@ -532,11 +533,11 @@ class Factory extends PIXI.Sprite {
     findHSM() {
         for (let y = -1; y < 2; y++) {
             for (let x = -1; x < 2; x++) {
-                if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                    (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                        if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content != null) {
-                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content.type == "HSM") {
-                                this.hsm = board[x + this.tileNumber[0]][y + this.tileNumber[1]].content;
+                if (!((y + this.tileNumber[0] < 0 && y == -1)|| (y + this.tileNumber[0] > 14 && y == 1) || 
+                    (x + this.tileNumber[1] < 0 && x == -1) || (x + this.tileNumber[1] > 14 && x == 1))) {
+                        if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content != null) {
+                            if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content.type == "HSM") {
+                                this.hsm = board[y + this.tileNumber[0]][x + this.tileNumber[1]].content;
                             }
                         }
                 }
@@ -568,9 +569,9 @@ class Factory extends PIXI.Sprite {
         if (turn == "X") {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                            if (board[x + this.tileNumber[0]][y + this.tileNumber[1]].content == mechX) {
+                    if (!((y + this.tileNumber[0] < 0 && y == -1)|| (y + this.tileNumber[0] > 14 && y == 1) || 
+                        (x + this.tileNumber[1] < 0 && x == -1) || (x + this.tileNumber[1] > 14 && x == 1))) {
+                            if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content == mechX) {
                                 return true;
                             }
                     }
@@ -580,9 +581,9 @@ class Factory extends PIXI.Sprite {
         else {
             for (let y = -1; y < 2; y++) {
                 for (let x = -1; x < 2; x++) {
-                    if (!((y + this.tileNumber[1] < 0 && y == -1)|| (y + this.tileNumber[1] > 14 && y == 1) || 
-                        (x + this.tileNumber[0] < 0 && x == -1) || (x + this.tileNumber[0] > 14 && x == 1))) {
-                        if (board[y + this.tileNumber[1]][x + this.tileNumber[0]].content == mechO) {
+                    if (!((y + this.tileNumber[0] < 0 && y == -1)|| (y + this.tileNumber[0] > 14 && y == 1) || 
+                        (x + this.tileNumber[1] < 0 && x == -1) || (x + this.tileNumber[1] > 14 && x == 1))) {
+                        if (board[y + this.tileNumber[0]][x + this.tileNumber[1]].content == mechO) {
                             return true;
                         }
                     }
