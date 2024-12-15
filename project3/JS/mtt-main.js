@@ -22,6 +22,7 @@ let hsms = [[],[],[]];
 let mechX, mechO, endTurn;
 let mechXUI, mechOUI, turnUI, buildUI;
 let knocking, powerUp, mechMove, oreGrind;
+let mainGame, userInterface;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
@@ -111,6 +112,11 @@ async function setup() {
     sceneWidth = app.renderer.width;
     sceneHeight = app.renderer.height;
 
+    mainGame = new PIXI.Container();
+    stage.addChild(mainGame);
+    userInterface = new PIXI.Container();
+    stage.addChild(userInterface);
+
     // Load audio
     knocking = new Howl({src: ["audio/knocking.mp3"],});
     powerUp = new Howl({src: ["audio/powerUp.mp3"],});
@@ -122,17 +128,17 @@ async function setup() {
         for (let x = 0; x < 15; x++) {
             let boardTile = new Tile(boardTileColor(), [y, x]);
             board[y][x] = boardTile;
-            stage.addChild(boardTile);
+            mainGame.addChild(boardTile);
         }
     }
 
     // Make mechs
     mechX = new Mech(assets.mttXMech, [0, 0], "X");
     onBoard.push(mechX);
-    stage.addChild(mechX);
+    mainGame.addChild(mechX);
     mechO = new Mech(assets.mttOMech, [14, 14], "O");
     onBoard.push(mechO);
-    stage.addChild(mechO);
+    mainGame.addChild(mechO);
 
     // Make HSMs
     for (let y = 0; y < 3; y++) {
@@ -155,7 +161,7 @@ async function setup() {
         }
         let ore = new Ore([oreTile[0], oreTile[1]]);
         onBoard.push(ore);
-        stage.addChild(ore);
+        mainGame.addChild(ore);
     }
 
     // Make UI
@@ -167,7 +173,7 @@ async function setup() {
         strokeThickness: 6,
     });
     mechXUI.visible = false;
-    stage.addChild(mechXUI);
+    userInterface.addChild(mechXUI);
     mechOUI = new PIXI.Text("Energy: " + mechO.energy + "/" + mechO.energyCapacity + " | Energy Regeneration: " + mechO.energyRegeneration + " | Ore: " + mechO.ore, {
         fill: 0xffffff,
         fontSize: 35,
@@ -176,7 +182,7 @@ async function setup() {
         strokeThickness: 6,
     });
     mechOUI.visible = false;
-    stage.addChild(mechOUI);
+    userInterface.addChild(mechOUI);
 
     turnUI = new PIXI.Text("Turn: X", {
         fill: 0xffffff,
@@ -186,15 +192,15 @@ async function setup() {
         strokeThickness: 6,
     });
     turnUI.x = sceneWidth - 150;
-    stage.addChild(turnUI);
+    userInterface.addChild(turnUI);
 
     buildUI = new BuildButton;
-    stage.addChild(buildUI);
+    userInterface.addChild(buildUI);
 
     endTurn = new EndTurn(assets.endTurn);
     endTurn.x = sceneWidth - endTurn.width;
     endTurn.y = sceneHeight - endTurn.height;
-    stage.addChild(endTurn);
+    userInterface.addChild(endTurn);
 
   app.ticker.add(gameLoop);
 }
@@ -204,7 +210,7 @@ function makeHSM(position, y, x) {
     let hsm = new HSM([position[0], position[1]]);
     hsms[y][x] = hsm;
     onBoard.push(hsm);
-    stage.addChild(hsm);
+    mainGame.addChild(hsm);
 }
 
 // Randomizes the type of tile that spawns, although not uniformly
@@ -288,7 +294,7 @@ function displayMechData(mech){
                     console.log("1 content post: " + board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content);
                     console.log("1 board[" + (mech.tileNumber[0] - 1) + "][" + (mech.tileNumber[1]) + "]");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[0] + 1 <= 14) {
@@ -299,7 +305,7 @@ function displayMechData(mech){
                     console.log("2 content post: " + board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content);
                     console.log("2 board[" + (mech.tileNumber[0] + 1) + "][" + (mech.tileNumber[1]) + "]");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[1] - 1 >= 0) {
@@ -310,7 +316,7 @@ function displayMechData(mech){
                     console.log("3 content post: " + board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content);
                     console.log("3 board[" + (mech.tileNumber[0]) + "][" + (mech.tileNumber[1] - 1) + "]");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[1] + 1 <= 14) {
@@ -321,7 +327,7 @@ function displayMechData(mech){
                     console.log("4 content post: " + board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content);
                     console.log("4 board[" + (mech.tileNumber[0]) + "][" + (mech.tileNumber[1] + 1) + "]");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             console.log("-----------------------")
@@ -335,28 +341,28 @@ function displayMechData(mech){
                 if (board[mech.tileNumber[0] - 1][[mech.tileNumber[1]]].content == null){
                     let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] - 1, mech.tileNumber[1]], "O");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[0] + 1 <= 14) {
                 if (board[mech.tileNumber[0] + 1][[mech.tileNumber[1]]].content == null) {
                     let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0] + 1, mech.tileNumber[1]], "O");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[1] - 1 >= 0) {
                 if (board[mech.tileNumber[0]][[mech.tileNumber[1] - 1]].content == null) {
                     let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] - 1], "O");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
             if (mech.tileNumber[1] + 1 <= 14) {
                 if (board[mech.tileNumber[0]][[mech.tileNumber[1] + 1]].content == null) {
                     let moveToken = new MovementToken(assets.mttOMarker, [mech.tileNumber[0], mech.tileNumber[1] + 1], "O");
                     tokens.push(moveToken);
-                    stage.addChild(moveToken);
+                    mainGame.addChild(moveToken);
                 }
             }
         }
@@ -418,7 +424,7 @@ function buildOptions() {
                         if (board[y + mechX.tileNumber[0]][x + mechX.tileNumber[1]].content == null) {
                             let buildMarker = new BuildMarker([y + mechX.tileNumber[0], x + mechX.tileNumber[1]], turn);
                             buildMarkers.push(buildMarker);
-                            stage.addChild(buildMarker);
+                            mainGame.addChild(buildMarker);
                         }
                 }
             }
@@ -432,7 +438,7 @@ function buildOptions() {
                         if (board[y + mechO.tileNumber[0]][x + mechO.tileNumber[1]].content == null) {
                             let buildMarker = new BuildMarker([y + mechO.tileNumber[0], x + mechO.tileNumber[1]], turn);
                             buildMarkers.push(buildMarker);
-                            stage.addChild(buildMarker);
+                            mainGame.addChild(buildMarker);
                         }
                 }
             }
@@ -446,7 +452,7 @@ function BuildFactory(tileNumber) {
         let factory = new Factory(assets.factoryXImg ,[tileNumber[0], tileNumber[1]], "X");
         onBoard.push(factory);
         factories.push(factory);
-        stage.addChild(factory);
+        mainGame.addChild(factory);
         knocking.play();
         mechX.ore -= 5;
         deselectAll();
@@ -455,7 +461,7 @@ function BuildFactory(tileNumber) {
         let factory = new Factory(assets.factoryOImg ,[tileNumber[0], tileNumber[1]], "O");
         onBoard.push(factory);
         factories.push(factory);
-        stage.addChild(factory);
+        mainGame.addChild(factory);
         knocking.play();
         mechO.ore -= 5;
         deselectAll();

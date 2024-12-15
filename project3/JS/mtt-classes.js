@@ -110,7 +110,7 @@ class MovementToken extends PIXI.Sprite {
     }
 
     deselect() {
-        stage.removeChild(this)
+        mainGame.removeChild(this)
     }
 }
 
@@ -175,7 +175,6 @@ class HSM extends PIXI.Sprite {
             for (let hsmPower of this.hsmBack.powers) {
                 hsmPower.visible = true;
             }
-            this.visible = false;
         }
     }
 
@@ -219,7 +218,6 @@ class HSM extends PIXI.Sprite {
     }
 
     deselect() {
-        this.visible = true;
         for (let hsmPower of this.hsmBack.powers) {
             hsmPower.visible = false;
         }
@@ -266,7 +264,7 @@ class HSMBack extends PIXI.Sprite {
         this.buttonMode = true;
         this.visible = false;
         this.powers = [];
-        stage.addChild(this);
+        userInterface.addChild(this);
 
         for (let i = 0; i < 8; i++) {
             let hsmPower = new HSMPower(this, i);
@@ -290,7 +288,7 @@ class HSMPower extends PIXI.Sprite {
         this.number = number;
         this.power = "null";
         this.hsmBack = hsmBack;
-        stage.addChild(this);     
+        userInterface.addChild(this);     
         this.on("click", this.select); // clicked
         this.on("tap", this.select); // clicked mobile
     }
@@ -484,7 +482,7 @@ class BuildMarker extends PIXI.Sprite {
     }
 
     deselect() {
-        stage.removeChild(this)
+        mainGame.removeChild(this)
     }
 }
 
@@ -557,7 +555,6 @@ class Factory extends PIXI.Sprite {
     select() {
         let check = this.proximityCheck();
         if (check) {
-            this.visible = false;
             this.factoryBack.visible = true;
             this.fillButton.visible = true;
             this.infoText.visible = true;
@@ -594,7 +591,6 @@ class Factory extends PIXI.Sprite {
     }
 
     deselect() {
-        this.visible = true;
         this.factoryBack.visible = false;
         this.fillButton.visible = false;
         this.infoText.visible = false;
@@ -614,7 +610,7 @@ class FactoryBack extends PIXI.Sprite {
         this.interactive = true;
         this.buttonMode = true;
         this.visible = false;
-        stage.addChild(this);
+        userInterface.addChild(this);
     }
 }
 
@@ -633,7 +629,7 @@ class FactoryFill extends PIXI.Sprite {
         this.on("tap", this.select); // clicked mobile
         this.visible = false;
         this.factory = factory;
-        stage.addChild(this);
+        userInterface.addChild(this);
     }
 
     select() {
