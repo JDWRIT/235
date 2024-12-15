@@ -27,7 +27,7 @@ let backDeselector;
 
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
-window.addEventListener("mouseup", reloadMechText);
+window.addEventListener("pointerup", reloadMechText);
 
 // The keys are logged when pressed down
 function keyDown(e) {
